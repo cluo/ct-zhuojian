@@ -13,6 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,9 +28,10 @@ public class ConsultationDao {
 
     protected JDBCClient sqlite = null;
 
-    public ConsultationDao(Vertx vertx) {
+    public ConsultationDao(Vertx vertx) throws UnsupportedEncodingException {
+        String db = URLDecoder.decode(ConsultationDao.class.getClassLoader().getResource("webroot/db/zhuojian").getFile(), "UTF-8");
         JsonObject sqliteConfig = new JsonObject()
-                .put("url", "jdbc:sqlite:E:/毕业论文/JavaProject/ct-zhuojian/src/main/resources/webroot/db/zhuojian")
+                .put("url", "jdbc:sqlite:"+db)
                 .put("driver_class", "org.sqlite.JDBC");
         sqlite = JDBCClient.createShared(vertx, sqliteConfig, "consultation");
     }

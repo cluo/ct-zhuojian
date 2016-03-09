@@ -12,11 +12,10 @@ import java.net.URLDecoder;
  */
 public class FileTest {
     public static void main(String[] args) throws IOException {
-        URL url = FileTest.class.getClassLoader().getResource("webroot/ctimage/1/1/IMG-0001-00001.jpg");
+        URL url = FileTest.class.getClassLoader().getResource("webroot/db/zhuojian");
         String img = URLDecoder.decode(url.getFile(), "UTF-8");
         System.out.println(img);
         File file = new File(img);
         System.out.println(file.exists());
-        BufferedImage bi = ImageIO.read(file);
     }
 }
