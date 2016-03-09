@@ -1,0 +1,52 @@
+<!doctype html>
+<html ng-app="ct">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>CT</title>
+
+        <!-- bootstrap -->
+        <link href="assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
+        <link href="assets/css/bootstrap/bootstrap-responsive.css" rel="stylesheet" />
+        <link href="assets/css/bootstrap/bootstrap-overrides.css" type="text/css" rel="stylesheet" />
+
+
+        <!--<script src="assets/js/jquery.min.js"></script>-->
+        <script src="assets/js/jquery-1.9.1.js"></script>
+
+        <!-- scripts -->
+        <!--<script src="http://code.jquery.com/jquery-latest.js"></script>-->
+        <script src="assets/js/bootstrap.min.js"></script>
+        <script src="assets/js/jquery-ui-1.10.2.custom.min.js"></script>
+
+        <script src="assets/js/angular.min.js"></script>
+        <script src="assets/js/angular-ui-router.min.js"></script>
+        <script src="assets/js/angular-storage.js"></script>
+        <script src="assets/js/angular-animate.min.js"></script>
+        <script src="assets/js/angular-touch.min.js"></script>
+        <!--<script src="assets/js/angular-file-upload.js"></script>-->
+        <!--<script src="assets/js/ng-flow-standalone.js"></script>-->
+        <script src="assets/js/ng-file-upload-shim.js"></script>
+        <script src="assets/js/ng-file-upload.js"></script>
+
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- main container -->
+                <div class="container-fluid">
+                    <div id="pad-wrapper">
+                        <div ui-view></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="app/app.js"></script>
+        <script src="app/ct/ct.js"></script>
+        <script src="app/ct/area.js"></script>
+        <script src="app/upload/upload.js"></script>
+        <script src="app/consultation/consultation.js"></script>
+    </body>
+</html>
+

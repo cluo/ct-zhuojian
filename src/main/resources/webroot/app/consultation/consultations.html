@@ -1,0 +1,42 @@
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+
+            <div class="page-header">
+                <h2>
+                    会诊记录
+                </h2>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>会诊号</th>
+                    <th>时间</th>
+                    <th>CT图像</th>
+                    <th>病情诊断</th>
+                    <th>更改时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id = "tbody">
+                <tr ng-repeat="consultation in consultations">
+                    <td>{{consultation.id}}</td>
+                    <td>{{consultation.created}}</td>
+                    <td>{{consultation.ctfile}}</td>
+                    <td>{{consultation.record}}</td>
+                    <td>{{consultation.updated}}</td>
+                    <td>
+                        <a href="#/consultation/{{consultation.id}}" >详情</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div id="pagemanage">
+                <a href="#"><span>第一页</span></a>
+                <span>上一页</span>
+                <a href="#"><span>下一页</span></a>
+                <a href="#"><span>最后一页</span></a>
+            </div>
+        </div>
+    </div>
+</div>

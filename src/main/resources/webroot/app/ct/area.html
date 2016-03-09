@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="assets/Jcrop/css/jquery.Jcrop.css" type="text/css" />
+<script src="assets/Jcrop/js/jquery.Jcrop.js"></script>
+<div class="container slider">
+    <img src="{{myImage}}" id="target" alt="[Jcrop Example]" />
+
+    <!-- This is the form that our event handler fills -->
+    <form id="coords" class="coords">
+        <div class="inline-labels">
+            <label>X1 <input type="text" size="4" id="x1" name="x1" /></label>
+            <label>Y1 <input type="text" size="4" id="y1" name="y1" /></label>
+            <label>X2 <input type="text" size="4" id="x2" name="x2" /></label>
+            <label>Y2 <input type="text" size="4" id="y2" name="y2" /></label>
+            <label>W <input type="text" size="4" id="w" name="w" /></label>
+            <label>H <input type="text" size="4" id="h" name="h" /></label>
+        </div>
+    </form>
+    <div class="result">
+        <a ng-click = "predictLesionType();">病灶识别</a>
+        <div>
+            {{result}}
+        </div>
+    </div>
+</div>

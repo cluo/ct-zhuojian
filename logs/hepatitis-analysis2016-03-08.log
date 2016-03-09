@@ -1,0 +1,15 @@
+09:51:54.578 INFO [main] o.r.Reflections [Reflections.java:229] Reflections took 141 ms to scan 1 urls, producing 1 keys and 1 values 
+09:55:35.805 INFO [main] o.r.Reflections [Reflections.java:229] Reflections took 97 ms to scan 1 urls, producing 1 keys and 1 values 
+11:33:11.222 INFO [main] o.r.Reflections [Reflections.java:229] Reflections took 68 ms to scan 1 urls, producing 1 keys and 2 values 
+11:53:19.150 INFO [main] o.r.Reflections [Reflections.java:229] Reflections took 75 ms to scan 1 urls, producing 1 keys and 2 values 
+13:27:37.656 INFO [main] o.r.Reflections [Reflections.java:229] Reflections took 73 ms to scan 1 urls, producing 1 keys and 2 values 
+13:41:14.391 INFO [main] o.r.Reflections [Reflections.java:229] Reflections took 78 ms to scan 1 urls, producing 1 keys and 2 values 
+13:43:12.066 INFO [main] o.r.Reflections [Reflections.java:229] Reflections took 70 ms to scan 1 urls, producing 1 keys and 2 values 
+13:46:41.875 INFO [main] o.r.Reflections [Reflections.java:229] Reflections took 82 ms to scan 1 urls, producing 1 keys and 2 values 
+13:55:18.815 INFO [main] o.r.Reflections [Reflections.java:229] Reflections took 61 ms to scan 1 urls, producing 1 keys and 2 values 
+14:49:49.843 INFO [main] o.r.Reflections [Reflections.java:229] Reflections took 76 ms to scan 1 urls, producing 1 keys and 2 values 
+14:50:36.754 INFO [main] o.r.Reflections [Reflections.java:229] Reflections took 67 ms to scan 1 urls, producing 1 keys and 2 values 
+14:57:14.640 INFO [main] o.r.Reflections [Reflections.java:229] Reflections took 81 ms to scan 1 urls, producing 1 keys and 2 values 
+15:02:20.467 INFO [main] o.r.Reflections [Reflections.java:229] Reflections took 74 ms to scan 1 urls, producing 1 keys and 2 values 
+15:50:26.457 INFO [main] o.r.Reflections [Reflections.java:229] Reflections took 69 ms to scan 1 urls, producing 1 keys and 2 values 
+20:48:46.582 INFO [main] o.r.Reflections [Reflections.java:229] Reflections took 382 ms to scan 1 urls, producing 1 keys and 2 values 
