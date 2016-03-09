@@ -67,4 +67,5 @@ Temporary Items
 
 # project
 .vertx/
-file-uploads
+file-uploads/
+logs/
