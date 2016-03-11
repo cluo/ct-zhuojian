@@ -3,7 +3,9 @@ package com.zhuojian.ct.verticle;
 import com.zhuojian.ct.annotations.RouteHandler;
 import com.zhuojian.ct.annotations.RouteMapping;
 import com.zhuojian.ct.annotations.RouteMethod;
+import com.zhuojian.ct.dao.CTImageDao;
 import com.zhuojian.ct.dao.ConsultationDao;
+import com.zhuojian.ct.model.CTImage;
 import com.zhuojian.ct.model.Consultation;
 import com.zhuojian.ct.model.HttpCode;
 import com.zhuojian.ct.utils.AppUtil;
@@ -41,6 +43,7 @@ public class Server extends AbstractVerticle {
     protected Router router;
 
     protected ConsultationDao consultationDao;
+    protected CTImageDao ctImageDao;
 
     @Override
     public void start() throws Exception {
@@ -48,6 +51,7 @@ public class Server extends AbstractVerticle {
         LOGGER.debug("Start server at port {} .....", port);
 
         consultationDao = new ConsultationDao(vertx);
+        ctImageDao = new CTImageDao(vertx);
 
         router = Router.router(vertx);
 
@@ -89,7 +93,10 @@ public class Server extends AbstractVerticle {
             Constructor constructor = handler.getConstructor(ConsultationDao.class);
             instance = constructor.newInstance(consultationDao);
         }
-        else{
+        else if(ReflectUtil.hasParams(handler, CTImageDao.class)){
+            Constructor constructor = handler.getConstructor(CTImageDao.class);
+            instance = constructor.newInstance(ctImageDao);
+        } else{
             instance = handler.newInstance();
         }
         Method[] methods = handler.getMethods();

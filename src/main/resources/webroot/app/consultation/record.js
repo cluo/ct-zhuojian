@@ -1,0 +1,37 @@
+/**
+ * Created by wuhaitao on 2016/3/10.
+ */
+angular.module('record',['ui.router'])
+    .config(function($stateProvider){
+        $stateProvider.state('record', {
+            url: '/record/:id',
+            templateUrl: 'app/consultation/record.html',
+            controller: 'RecordCtrl'
+        });
+    })
+    .service('RecordService', function($http){
+        var service = this;
+        service.getRecord = function(id){
+            return $http.get('/api/consultation/record/'+id);
+        };
+    })
+    .controller('RecordCtrl', function($scope, $state, $stateParams, RecordService){
+        var id = $stateParams.id;
+        $scope.id = id;
+        /*$scope.goArea = function(){
+            $state.go('area', {image : $scope.file});
+        }*/
+        function getRecord(id){
+            RecordService.getRecord(id)
+                .then(function(result){
+                    $scope.type = result.data.type;
+                    $scope.file = result.data.file;
+                    $scope.diagnosis = result.data.diagnosis;
+                },function(error){
+                    console.log(error);
+                });
+            /*$scope.record = "混合性肝癌伴肝内多发子灶形成首先考虑，门脉主干及左右支栓塞，脾静脉近段栓塞；后腹膜多发淋巴结肿大。  肝硬化、腹水；门脉海绵样变性，胃底食管静脉丛曲张。";*/
+        }
+
+        getRecord(id);
+    });

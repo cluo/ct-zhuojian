@@ -4,5 +4,5 @@
   "db.driver_class" : "com.mysql.jdbc.Driver",
   "db.user" : "root",
   "db.password" : "gaotie508",
-  "upload.path" : "file-uploads"
+  "upload.path" : "upload"
 }

@@ -39,7 +39,6 @@ public class ConsultationHandler {
                         JsonObject obj = new JsonObject();
                         obj.put("id", consultation.getId());
                         obj.put("created", consultation.getCreated());
-                        obj.put("ctfile", consultation.getCtfile());
                         obj.put("record", consultation.getRecord());
                         obj.put("updated", consultation.getUpdated());
                         cts.add(obj);
@@ -56,12 +55,11 @@ public class ConsultationHandler {
     public Handler<RoutingContext> addConsultation(){
         return ctx -> {
             JsonObject data = ctx.getBodyAsJson();
-            String id = data.getString("id");
+            int id = Integer.parseInt(data.getString("id"));
             String created = data.getString("created");
-            String ctfile = data.getString("ctfile");
             String record = data.getString("record");
             String updated = data.getString("updated");
-            consultationDao.addConsultation(new Consultation(id,created,ctfile,record,updated), responseMsg -> {
+            consultationDao.addConsultation(new Consultation(id,created,record,updated), responseMsg -> {
                 if (responseMsg.getCode().getCode() == HttpCode.OK.getCode()){
                     ctx.response().end(responseMsg.getMsg());
                 }
@@ -76,17 +74,13 @@ public class ConsultationHandler {
     public Handler<RoutingContext> updateConsultation(){
         return ctx -> {
             JsonObject data = ctx.getBodyAsJson();
-            String id = data.getString("id");
-            String ctfile = data.getString("ctfile");
+            int id = Integer.parseInt(data.getString("id"));
             String record = data.getString("record");
             Consultation consultation = new Consultation(id);
-            if (StringUtils.isNotEmpty(ctfile)){
-                consultation.setCtfile(ctfile);
-            }
             if (StringUtils.isNotEmpty(record)){
                 consultation.setRecord(record);
             }
-            consultationDao.addConsultation(consultation, responseMsg -> {
+            consultationDao.updateConsultation(consultation, responseMsg -> {
                 if (responseMsg.getCode().getCode() == HttpCode.OK.getCode()){
                     ctx.response().end(responseMsg.getMsg());
                 }

@@ -12,10 +12,15 @@ import java.net.URLDecoder;
  */
 public class FileTest {
     public static void main(String[] args) throws IOException {
-        URL url = FileTest.class.getClassLoader().getResource("webroot/db/zhuojian");
+        /*URL url = FileTest.class.getClassLoader().getResource("webroot/db/zhuojian");
         String img = URLDecoder.decode(url.getFile(), "UTF-8");
         System.out.println(img);
         File file = new File(img);
+        System.out.println(file.exists());*/
+        URL url = FileTest.class.getClassLoader().getResource("webroot");
+        String path = URLDecoder.decode(url.getPath(), "UTF-8");
+        System.out.println(path);
+        File file = new File(path);
         System.out.println(file.exists());
     }
 }

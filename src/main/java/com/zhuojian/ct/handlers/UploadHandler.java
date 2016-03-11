@@ -3,6 +3,11 @@ package com.zhuojian.ct.handlers;
 import com.zhuojian.ct.annotations.RouteHandler;
 import com.zhuojian.ct.annotations.RouteMapping;
 import com.zhuojian.ct.annotations.RouteMethod;
+import com.zhuojian.ct.dao.CTImageDao;
+import com.zhuojian.ct.dao.ConsultationDao;
+import com.zhuojian.ct.model.CTImage;
+import com.zhuojian.ct.model.HttpCode;
+import com.zhuojian.ct.utils.AppUtil;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonObject;
@@ -11,7 +16,7 @@ import io.vertx.ext.web.RoutingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.*;
 import java.util.Set;
 
 /**
@@ -21,27 +26,44 @@ import java.util.Set;
 public class UploadHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(UploadHandler.class);
 
+    private CTImageDao ctImageDao;
+
+    public UploadHandler(CTImageDao ctImageDao) {
+        this.ctImageDao = ctImageDao;
+    }
+
     @RouteMapping(method = RouteMethod.POST)
     public Handler<RoutingContext> upload() {
         return ctx -> {
             HttpServerRequest request = ctx.request();
-            String username = request.getParam("username");
-            System.out.println(username);
+            int id = Integer.parseInt(request.getParam("id"));
+            int type = Integer.parseInt(request.getParam("type"));
+            System.out.println(id);
+            System.out.println(type);
             Set<FileUpload> files = ctx.fileUploads();
-            String filename = "";
             for (FileUpload file : files) {
                 System.out.println(file.fileName());
                 String path = file.uploadedFileName();
+                String img = path.substring(path.indexOf(AppUtil.configStr("upload.path")));
+                CTImage ctImage = new CTImage();
+                ctImage.setType(type == 1 ? "肝脏" : "肺部");
+                ctImage.setFile(img);
+                ctImage.setDiagnosis("");
+                ctImage.setConsultationId(id);
                 File file1 = new File(path);
                 System.out.println(file1.exists());
                 System.out.println(path);
-                LOGGER.debug("upload path : {}", path);
-                filename = path.substring(path.lastIndexOf("\\") + 1);
+                LOGGER.info("upload path : {}", path);
+                ctImageDao.addCTImage(ctImage, responseMsg -> {
+                    if (responseMsg.getCode().getCode() == HttpCode.OK.getCode()) {
+                        String filename = path.substring(path.lastIndexOf("\\") + 1);
+                        ctx.response().end(new JsonObject().put("filename", filename).encode());
+                    } else {
+                        ctx.response().setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getMsg());
+                    }
+                });
+                break;
             }
-
-            JsonObject file = new JsonObject();
-            file.put("filename", filename);
-            ctx.response().end(file.encode());
         };
     }
 }

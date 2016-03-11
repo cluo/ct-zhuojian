@@ -4,42 +4,33 @@ package com.zhuojian.ct.model;
  * Created by wuhaitao on 2016/3/9.
  */
 public class Consultation {
-    private String id;
+    private int id;
     private String created;
-    private String ctfile;
     private String record;
     private String updated;
 
     public Consultation() {
     }
 
-    public Consultation(String id) {
+    public Consultation(int id) {
         this.id = id;
     }
 
-    public Consultation(String id, String created, String ctfile, String record, String updated) {
+    public Consultation(int id, String created, String record, String updated) {
         this.id = id;
         this.created = created;
-        this.ctfile = ctfile;
         this.record = record;
         this.updated = updated;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getCtfile() {
-        return ctfile;
-    }
-
-    public void setCtfile(String ctfile) {
-        this.ctfile = ctfile;
-    }
 
     public String getRecord() {
         return record;

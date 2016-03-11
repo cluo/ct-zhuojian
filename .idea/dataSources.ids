@@ -5,12 +5,24 @@
     <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed"/>
     <schema name="" catalog=""/>
     <table name="consultation" schema="" catalog="" type="TABLE">
-      <column name="id" sqlType="TEXT" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="created" sqlType="TEXT" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
-      <column name="ctfile" sqlType="TEXT" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
-      <column name="record" sqlType="TEXT" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
-      <column name="updated" sqlType="TEXT" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
+      <column name="id" sqlType="INT" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="created" sqlType="VARCHAR" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="updated" sqlType="VARCHAR" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="record" sqlType="VARCHAR" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
       <primary-key columns="id"/>
+    </table>
+    <table name="ct" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="true" jdbcType="4"/>
+      <column name="type" sqlType="INTEGER" precision="2000000000" scale="10" nullable="true" jdbcType="4"/>
+      <column name="file" sqlType="VARCHAR" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
+      <column name="diagnosis" sqlType="VARCHAR" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
+      <column name="consultationId" sqlType="INTEGER" precision="2000000000" scale="10" nullable="true" jdbcType="4"/>
+      <column name="image" sqlType="BLOB" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
+      <primary-key columns="id"/>
+    </table>
+    <table name="sqlite_sequence" schema="" catalog="" type="TABLE">
+      <column name="name" sqlType="" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
+      <column name="seq" sqlType="" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
     </table>
   </data-source>
 </component>

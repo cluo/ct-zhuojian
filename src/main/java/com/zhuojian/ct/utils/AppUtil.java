@@ -10,7 +10,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -87,8 +90,16 @@ public class AppUtil {
     }
 
     public static String getUploadDir() {
-        return AppUtil.configStr("upload.path") == null ?
-                BodyHandler.DEFAULT_UPLOADS_DIRECTORY : AppUtil.configStr("upload.path");
+        /*return AppUtil.configStr("upload.path") == null ?
+                BodyHandler.DEFAULT_UPLOADS_DIRECTORY : AppUtil.configStr("upload.path");*/
+        try {
+            String path = URLDecoder.decode(AppUtil.class.getClassLoader().getResource("webroot").getPath(), "UTF-8");
+            return AppUtil.configStr("upload.path") == null ?
+                    BodyHandler.DEFAULT_UPLOADS_DIRECTORY : path + File.separator + AppUtil.configStr("upload.path");
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.error(e.getMessage(), e);
+            return BodyHandler.DEFAULT_UPLOADS_DIRECTORY;
+        }
     }
 
 }

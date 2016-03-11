@@ -12,9 +12,13 @@ angular.module('upload', ['ui.router','ngFileUpload'])
     })
     .controller('UploadCtrl', ['$scope', 'Upload', function ($scope, Upload) {
         // upload later on form submit or something similar
+        $scope.id = "";
+        $scope.type = 1;
         $scope.submit = function() {
             if ($scope.form.file.$valid && $scope.file) {
                 $scope.upload($scope.file);
+                /*console.log($scope.id);
+                console.log($scope.type);*/
             }
         };
 
@@ -22,7 +26,7 @@ angular.module('upload', ['ui.router','ngFileUpload'])
         $scope.upload = function (file) {
             Upload.upload({
                 url: '/upload',
-                data: {file: file, 'username': 'wuhaitao'}
+                data: {file: file, 'id': $scope.id, 'type':$scope.type}
             }).then(function (resp) {
                 console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
             }, function (resp) {

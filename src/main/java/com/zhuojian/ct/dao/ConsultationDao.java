@@ -3,6 +3,7 @@ package com.zhuojian.ct.dao;
 import com.zhuojian.ct.model.Consultation;
 import com.zhuojian.ct.model.HttpCode;
 import com.zhuojian.ct.model.ResponseMsg;
+import com.zhuojian.ct.utils.JDBCConnUtil;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
@@ -29,11 +30,41 @@ public class ConsultationDao {
     protected JDBCClient sqlite = null;
 
     public ConsultationDao(Vertx vertx) throws UnsupportedEncodingException {
-        String db = URLDecoder.decode(ConsultationDao.class.getClassLoader().getResource("webroot/db/zhuojian").getFile(), "UTF-8");
+        /*String db = URLDecoder.decode(ConsultationDao.class.getClassLoader().getResource("webroot/db/zhuojian").getFile(), "UTF-8");*/
+        String db = "E:/毕业论文/JavaProject/ct-zhuojian/src/main/resources/webroot/db/zhuojian";
         JsonObject sqliteConfig = new JsonObject()
                 .put("url", "jdbc:sqlite:"+db)
                 .put("driver_class", "org.sqlite.JDBC");
         sqlite = JDBCClient.createShared(vertx, sqliteConfig, "consultation");
+    }
+
+    public void uploadCT(Consultation consultation, Handler<Consultation> consultationHandler){
+        sqlite.getConnection(connection -> {
+            if (connection.failed()){
+                LOGGER.error("connection sqlite failed!");
+                consultationHandler.handle(null);
+            }
+            else{
+                SQLConnection conn = connection.result();
+                conn.query("select * from consultation where id = "+consultation.getId(), result -> {
+                    if (result.succeeded()){
+                        List<JsonObject> objs = result.result().getRows();
+                        if (objs != null && !objs.isEmpty()) {
+
+                            consultationHandler.handle(consultation);
+                        }
+                        else{
+                            consultationHandler.handle(null);
+                        }
+                    }
+                    else{
+                        LOGGER.error("insert data failed!");
+                        consultationHandler.handle(null);
+                    }
+                    JDBCConnUtil.close(conn);
+                });
+            }
+        });
     }
 
     public void getConsultations(Handler<List<Consultation>> consultationsHandler){
@@ -53,9 +84,8 @@ public class ConsultationDao {
                             consultations = new ArrayList<>();
                             for (JsonObject obj : objs) {
                                 consultation = new Consultation();
-                                consultation.setId(obj.getString("id"));
+                                consultation.setId(obj.getInteger("id"));
                                 consultation.setCreated(obj.getString("created"));
-                                consultation.setCtfile(obj.getString("ctfile"));
                                 consultation.setRecord(obj.getString("record"));
                                 consultation.setUpdated(obj.getString("updated"));
                                 consultations.add(consultation);
@@ -84,8 +114,8 @@ public class ConsultationDao {
                return;
             }
             SQLConnection conn = connection.result();
-            JsonArray params = new JsonArray().add(consultation.getId()).add(consultation.getCreated()).add(consultation.getCtfile()).add(consultation.getRecord()).add(consultation.getUpdated());
-            String sql = "insert into consultation(id,created,ctfile,record,updated) values(?,?,?,?,?)";
+            JsonArray params = new JsonArray().add(consultation.getId()).add(consultation.getCreated()).add(consultation.getRecord()).add(consultation.getUpdated());
+            String sql = "insert into consultation(id,created,record,updated) values(?,?,?,?)";
             conn.updateWithParams(sql, params, insertResult -> {
                 if (insertResult.succeeded()){
                     /*System.out.println("insert data success!");*/
@@ -115,10 +145,6 @@ public class ConsultationDao {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String updated = sdf.format(new Date());
             params.add(updated);
-            if (StringUtils.isNotEmpty(consultation.getCtfile())){
-                params.add(consultation.getCtfile());
-                sql.append(",ctfile = ?");
-            }
             if (StringUtils.isNotEmpty(consultation.getRecord())){
                 params.add(consultation.getRecord());
                 sql.append(",record = ?");
