@@ -39,8 +39,6 @@ public class UploadHandler {
             HttpServerRequest request = ctx.request();
             int id = Integer.parseInt(request.getParam("id"));
             int type = Integer.parseInt(request.getParam("type"));
-            System.out.println(id);
-            System.out.println(type);
             Set<FileUpload> files = ctx.fileUploads();
             for (FileUpload file : files) {
                 System.out.println(file.fileName());
