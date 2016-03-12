@@ -1,5 +1,6 @@
 package com.zhuojian.ct.dao;
 
+import com.zhuojian.ct.annotations.HandlerDao;
 import com.zhuojian.ct.model.Consultation;
 import com.zhuojian.ct.model.HttpCode;
 import com.zhuojian.ct.model.ResponseMsg;
@@ -23,6 +24,7 @@ import java.util.List;
 /**
  * Created by wuhaitao on 2016/3/8.
  */
+@HandlerDao
 public class ConsultationDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConsultationDao.class);
 

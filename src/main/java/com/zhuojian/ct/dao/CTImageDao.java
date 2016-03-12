@@ -1,5 +1,6 @@
 package com.zhuojian.ct.dao;
 
+import com.zhuojian.ct.annotations.HandlerDao;
 import com.zhuojian.ct.model.CTImage;
 import com.zhuojian.ct.model.HttpCode;
 import com.zhuojian.ct.model.ResponseMsg;
@@ -19,6 +20,7 @@ import java.util.List;
 /**
  * Created by wuhaitao on 2016/3/10.
  */
+@HandlerDao
 public class CTImageDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(CTImageDao.class);
 

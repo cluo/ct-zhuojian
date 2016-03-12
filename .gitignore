@@ -66,6 +66,7 @@ Temporary Items
 .apdisk
 
 # project
+.idea/
 .vertx/
 file-uploads/
 logs/

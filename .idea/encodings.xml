@@ -18,7 +18,7 @@
     <file url="file://$PROJECT_DIR$/src/main/java/com/zhuojian/ct/utils/ImageUtil.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/zhuojian/ct/utils/SQLUtil.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/zhuojian/ct/verticle/LesionRecognitionServer.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/com/zhuojian/ct/verticle/Server.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/zhuojian/ct/verticle/WebServer.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources/config.json" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources/feature" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources/lesion.json" charset="UTF-8" />

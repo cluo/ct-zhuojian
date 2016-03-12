@@ -1,6 +1,7 @@
 package com.zhuojian.ct.dao;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zhuojian.ct.annotations.HandlerDao;
 import com.zhuojian.ct.utils.AppUtil;
 import com.zhuojian.ct.utils.Constants;
 import io.vertx.core.Handler;
@@ -20,6 +21,7 @@ import java.util.Map;
 /**
  * Created by wuhaitao on 2016/3/12.
  */
+@HandlerDao
 public class FeatureDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(CTImageDao.class);
 
