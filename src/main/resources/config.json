@@ -1,8 +1,6 @@
 {
   "port" : 8080,
-  "db.url" : "jdbc:mysql://10.13.81.181:3306/hepatitis?useUnicode=true&characterEncoding=utf8",
-  "db.driver_class" : "com.mysql.jdbc.Driver",
-  "db.user" : "root",
-  "db.password" : "gaotie508",
+  "db.url" : "jdbc:sqlite:E:/毕业论文/JavaProject/ct-zhuojian/src/main/resources/webroot/db/zhuojian",
+  "db.driver_class" : "org.sqlite.JDBC",
   "upload.path" : "upload"
 }

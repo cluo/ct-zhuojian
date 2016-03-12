@@ -14,9 +14,10 @@ public class HistogramFeature implements Feature{
 
     @Override
     public double[] getFeature(String image, int x1, int y1, int x2, int y2) throws IOException {
-        URL url = HistogramFeature.class.getClassLoader().getResource("webroot/" + image);
+        /*URL url = HistogramFeature.class.getClassLoader().getResource("webroot/" + image);
         String img = URLDecoder.decode(url.getFile(), "UTF-8");
-        File file = new File(img);
+        File file = new File(img);*/
+        File file = new File(image);
         BufferedImage bi = ImageIO.read(file);
         double sgray[] = new double[256];
         for(int i=0; i<256; i++) {

@@ -10,6 +10,7 @@ import com.zhuojian.ct.model.HttpCode;
 import com.zhuojian.ct.utils.AppUtil;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.FileUpload;
 import io.vertx.ext.web.RoutingContext;
@@ -44,7 +45,9 @@ public class UploadHandler {
             for (FileUpload file : files) {
                 System.out.println(file.fileName());
                 String path = file.uploadedFileName();
+                System.out.println(path);
                 String img = path.substring(path.indexOf(AppUtil.configStr("upload.path")));
+                System.out.println(img);
                 CTImage ctImage = new CTImage();
                 ctImage.setType(type == 1 ? "肝脏" : "肺部");
                 ctImage.setFile(img);
@@ -52,7 +55,6 @@ public class UploadHandler {
                 ctImage.setConsultationId(id);
                 File file1 = new File(path);
                 System.out.println(file1.exists());
-                System.out.println(path);
                 LOGGER.info("upload path : {}", path);
                 ctImageDao.addCTImage(ctImage, responseMsg -> {
                     if (responseMsg.getCode().getCode() == HttpCode.OK.getCode()) {
@@ -66,4 +68,16 @@ public class UploadHandler {
             }
         };
     }
+
+    @RouteMapping(method = RouteMethod.GET, value = "/:image")
+    public Handler<RoutingContext> getCTImage(){
+        return  ctx -> {
+            String image = ctx.request().getParam("image");
+            System.out.println(image);
+            HttpServerResponse response = ctx.response();
+            response.setChunked(true);
+            response.sendFile(AppUtil.getUploadDir() + File.separator + image);
+        };
+    }
+
 }

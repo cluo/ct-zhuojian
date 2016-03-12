@@ -3,6 +3,7 @@ package com.zhuojian.ct.dao;
 import com.zhuojian.ct.model.Consultation;
 import com.zhuojian.ct.model.HttpCode;
 import com.zhuojian.ct.model.ResponseMsg;
+import com.zhuojian.ct.utils.AppUtil;
 import com.zhuojian.ct.utils.JDBCConnUtil;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
@@ -31,10 +32,10 @@ public class ConsultationDao {
 
     public ConsultationDao(Vertx vertx) throws UnsupportedEncodingException {
         /*String db = URLDecoder.decode(ConsultationDao.class.getClassLoader().getResource("webroot/db/zhuojian").getFile(), "UTF-8");*/
-        String db = "E:/毕业论文/JavaProject/ct-zhuojian/src/main/resources/webroot/db/zhuojian";
+        /*String db = "E:/毕业论文/JavaProject/ct-zhuojian/src/main/resources/webroot/db/zhuojian";*/
         JsonObject sqliteConfig = new JsonObject()
-                .put("url", "jdbc:sqlite:"+db)
-                .put("driver_class", "org.sqlite.JDBC");
+                .put("url", AppUtil.configStr("db.url"))
+                .put("driver_class", AppUtil.configStr("db.driver_class"));
         sqlite = JDBCClient.createShared(vertx, sqliteConfig, "consultation");
     }
 
