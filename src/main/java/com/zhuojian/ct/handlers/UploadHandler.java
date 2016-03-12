@@ -4,7 +4,6 @@ import com.zhuojian.ct.annotations.RouteHandler;
 import com.zhuojian.ct.annotations.RouteMapping;
 import com.zhuojian.ct.annotations.RouteMethod;
 import com.zhuojian.ct.dao.CTImageDao;
-import com.zhuojian.ct.dao.ConsultationDao;
 import com.zhuojian.ct.model.CTImage;
 import com.zhuojian.ct.model.HttpCode;
 import com.zhuojian.ct.utils.AppUtil;
@@ -16,7 +15,6 @@ import io.vertx.ext.web.FileUpload;
 import io.vertx.ext.web.RoutingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.*;
 import java.util.Set;
 
@@ -33,6 +31,10 @@ public class UploadHandler {
         this.ctImageDao = ctImageDao;
     }
 
+    /**
+     * 文件上传
+     * @return
+     */
     @RouteMapping(method = RouteMethod.POST)
     public Handler<RoutingContext> upload() {
         return ctx -> {
@@ -67,6 +69,10 @@ public class UploadHandler {
         };
     }
 
+    /**
+     * 获取上传的图片在前端显示，这里的图片不包含在静态资源里，而是通过web请求获取
+     * @return
+     */
     @RouteMapping(method = RouteMethod.GET, value = "/:image")
     public Handler<RoutingContext> getCTImage(){
         return  ctx -> {

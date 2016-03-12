@@ -14,6 +14,7 @@ angular.module('upload', ['ui.router','ngFileUpload'])
         // upload later on form submit or something similar
         $scope.id = "";
         $scope.type = 1;
+        $scope.result = '';
         $scope.submit = function() {
             if ($scope.form.file.$valid && $scope.file) {
                 $scope.upload($scope.file);
@@ -28,8 +29,10 @@ angular.module('upload', ['ui.router','ngFileUpload'])
                 url: '/upload',
                 data: {file: file, 'id': $scope.id, 'type':$scope.type}
             }).then(function (resp) {
+                $scope.result = 'upload success!';
                 console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
             }, function (resp) {
+                $scope.result = 'upload failed!';
                 console.log('Error status: ' + resp.status);
             }, function (evt) {
                 var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);

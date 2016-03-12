@@ -5,7 +5,6 @@ import com.zhuojian.ct.annotations.RouteMapping;
 import com.zhuojian.ct.annotations.RouteMethod;
 import com.zhuojian.ct.dao.CTImageDao;
 import com.zhuojian.ct.model.CTImage;
-import com.zhuojian.ct.model.HttpCode;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonArray;

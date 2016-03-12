@@ -5,25 +5,18 @@ import com.zhuojian.ct.annotations.RouteMapping;
 import com.zhuojian.ct.annotations.RouteMethod;
 import com.zhuojian.ct.dao.CTImageDao;
 import com.zhuojian.ct.dao.ConsultationDao;
-import com.zhuojian.ct.model.CTImage;
-import com.zhuojian.ct.model.Consultation;
-import com.zhuojian.ct.model.HttpCode;
+import com.zhuojian.ct.dao.FeatureDao;
 import com.zhuojian.ct.utils.AppUtil;
 import com.zhuojian.ct.utils.ReflectUtil;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Handler;
-import io.vertx.core.http.HttpServerResponse;
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.*;
 import io.vertx.ext.web.sstore.LocalSessionStore;
-import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Set;
@@ -44,6 +37,7 @@ public class Server extends AbstractVerticle {
 
     protected ConsultationDao consultationDao;
     protected CTImageDao ctImageDao;
+    protected FeatureDao featureDao;
 
     @Override
     public void start() throws Exception {
@@ -52,6 +46,7 @@ public class Server extends AbstractVerticle {
 
         consultationDao = new ConsultationDao(vertx);
         ctImageDao = new CTImageDao(vertx);
+        featureDao = new FeatureDao(vertx);
 
         router = Router.router(vertx);
 
@@ -96,7 +91,11 @@ public class Server extends AbstractVerticle {
         else if(ReflectUtil.hasParams(handler, CTImageDao.class)){
             Constructor constructor = handler.getConstructor(CTImageDao.class);
             instance = constructor.newInstance(ctImageDao);
-        } else{
+        }
+        else if(ReflectUtil.hasParams(handler, FeatureDao.class)){
+            Constructor constructor = handler.getConstructor(FeatureDao.class);
+            instance = constructor.newInstance(featureDao);
+        }else{
             instance = handler.newInstance();
         }
         Method[] methods = handler.getMethods();
