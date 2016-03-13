@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by wuhaitao on 2016/3/10.
@@ -125,16 +126,42 @@ public class CTImageDao {
             String sql = "insert into ct(type,file,diagnosis,consultationId) values(?,?,?,?)";
             conn.updateWithParams(sql, params, insertResult -> {
                 if (insertResult.succeeded()){
-                    /*System.out.println("insert data success!");*/
                     LOGGER.info("insert data success!");
                     responseMsgHandler.handle(new ResponseMsg(HttpCode.OK, "insert ct success!"));
                 }
                 else{
-                    /*System.out.println("insert data failed!");*/
                     LOGGER.error("insert data failed!");
                     responseMsgHandler.handle(new ResponseMsg(HttpCode.INTERNAL_SERVER_ERROR, "sqlite insert data failed!"));
                 }
             });
+        });
+    }
+
+    public void addCTImages(List<CTImage> ctImages, Handler<ResponseMsg> responseMsgHandler){
+        sqlite.getConnection(connection -> {
+            if (connection.failed()){
+                LOGGER.error("connection sqlite failed!");
+                responseMsgHandler.handle(new ResponseMsg(HttpCode.INTERNAL_SERVER_ERROR, "sqlite connected failed!"));
+                return;
+            }
+            ResponseMsg responseMsg = new ResponseMsg(HttpCode.OK, "upload ct files success!");
+            LOGGER.info("start receive file");
+            SQLConnection conn = connection.result();
+            for (CTImage ctImage:ctImages) {
+                JsonArray params = new JsonArray().add(ctImage.getType()).add(ctImage.getFile()).add(ctImage.getDiagnosis()).add(ctImage.getConsultationId());
+                String sql = "insert into ct(type,file,diagnosis,consultationId) values(?,?,?,?)";
+                conn.updateWithParams(sql, params, insertResult -> {
+                    /*JDBCConnUtil.close(conn);*/
+                    LOGGER.info("receive file");
+                    if (insertResult.failed()) {
+                        LOGGER.info("insert ct {} failed!", ctImage.getFile());
+                        /*responseMsg.setCode(HttpCode.INTERNAL_SERVER_ERROR);
+                        responseMsg.setMsg("upload ct files occurs sqlite exception!");*/
+                    }
+                });
+            }
+            LOGGER.info("receive file finished");
+            responseMsgHandler.handle(responseMsg);
         });
     }
 

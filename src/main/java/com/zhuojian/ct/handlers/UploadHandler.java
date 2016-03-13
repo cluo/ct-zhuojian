@@ -16,6 +16,8 @@ import io.vertx.ext.web.RoutingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -61,6 +63,35 @@ public class UploadHandler {
                 });
                 break;
             }
+        };
+    }
+
+    /**
+     * 文件上传
+     * @return
+     */
+    @RouteMapping(method = RouteMethod.POST, value = "/files")
+    public Handler<RoutingContext> uploadFiles() {
+        return ctx -> {
+            HttpServerRequest request = ctx.request();
+            int id = Integer.parseInt(request.getParam("id"));
+            int type = Integer.parseInt(request.getParam("type"));
+            Set<FileUpload> files = ctx.fileUploads();
+            List<CTImage> ctImages = new ArrayList<>(files.size());
+            for (FileUpload file : files) {
+                String path = file.uploadedFileName();
+                String img = path.substring(path.indexOf(AppUtil.configStr("upload.path")));
+                CTImage ctImage = new CTImage();
+                ctImage.setType(type == 1 ? "肝脏" : "肺部");
+                ctImage.setFile(img);
+                ctImage.setDiagnosis("");
+                ctImage.setConsultationId(id);
+                LOGGER.info("upload path : {}", path);
+                ctImages.add(ctImage);
+            }
+            ctImageDao.addCTImages(ctImages, responseMsg -> {
+                ctx.response().setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getMsg());
+            });
         };
     }
 

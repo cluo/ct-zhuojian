@@ -21,6 +21,7 @@ public class ReflectTest {
             Object instance = null;
             System.out.println(handler.getSimpleName());
             Constructor[] constructors = handler.getConstructors();
+            System.out.println(constructors.length);
             for (Constructor constructor : constructors) {
                 Class<?>[] clazzs = constructor.getParameterTypes();
                 for (Class<?> clazz : clazzs) {

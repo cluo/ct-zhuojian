@@ -95,10 +95,16 @@ public class WebServer extends AbstractVerticle {
             RouteHandler routeHandler = handler.getAnnotation(RouteHandler.class);
             root = routeHandler.value();
         }
-        Object instance = null;
         LOGGER.info("Handler:{}", handler.getSimpleName());
         Constructor[] constructors = handler.getConstructors();
-        for (Constructor constructor:constructors){
+        Class<?>[] clazzs = constructors[0].getParameterTypes();
+        int length = clazzs.length;
+        Object[] objects = new Object[length];
+        for (int i = 0; i < length; i++) {
+            objects[i] = daoMap.get(clazzs[i]);
+        }
+        Object instance = constructors[0].newInstance(objects);
+        /*for (Constructor constructor:constructors){
             Class<?>[] clazzs = constructor.getParameterTypes();
             int length = clazzs.length;
             Object[] objects = new Object[length];
@@ -107,8 +113,7 @@ public class WebServer extends AbstractVerticle {
             }
             instance = constructor.newInstance(objects);
             break;
-        }
-
+        }*/
         Method[] methods = handler.getMethods();
         for (Method method : methods) {
             if (method.isAnnotationPresent(RouteMapping.class)) {
