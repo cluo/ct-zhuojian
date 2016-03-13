@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zhuojian.ct.annotations.HandlerDao;
 import com.zhuojian.ct.utils.AppUtil;
 import com.zhuojian.ct.utils.Constants;
+import com.zhuojian.ct.utils.JDBCConnUtil;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
@@ -67,6 +68,7 @@ public class FeatureDao {
                     else{
                         handler.handle(result.cause().getMessage());
                     }
+                    JDBCConnUtil.close(conn);
                 });
             }
         });

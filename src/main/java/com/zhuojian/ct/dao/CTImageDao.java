@@ -5,6 +5,7 @@ import com.zhuojian.ct.model.CTImage;
 import com.zhuojian.ct.model.HttpCode;
 import com.zhuojian.ct.model.ResponseMsg;
 import com.zhuojian.ct.utils.AppUtil;
+import com.zhuojian.ct.utils.JDBCConnUtil;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
@@ -67,6 +68,7 @@ public class CTImageDao {
                         LOGGER.error("get ctimage by id failed!");
                         ctImageHandler.handle(null);
                     }
+                    JDBCConnUtil.close(conn);
                 });
             }
         });
@@ -104,6 +106,7 @@ public class CTImageDao {
                         LOGGER.error("insert data failed!");
                         ctsHandler.handle(null);
                     }
+                    JDBCConnUtil.close(conn);
                 });
             }
         });

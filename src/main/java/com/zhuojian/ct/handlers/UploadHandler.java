@@ -43,18 +43,13 @@ public class UploadHandler {
             int type = Integer.parseInt(request.getParam("type"));
             Set<FileUpload> files = ctx.fileUploads();
             for (FileUpload file : files) {
-                System.out.println(file.fileName());
                 String path = file.uploadedFileName();
-                System.out.println(path);
                 String img = path.substring(path.indexOf(AppUtil.configStr("upload.path")));
-                System.out.println(img);
                 CTImage ctImage = new CTImage();
                 ctImage.setType(type == 1 ? "肝脏" : "肺部");
                 ctImage.setFile(img);
                 ctImage.setDiagnosis("");
                 ctImage.setConsultationId(id);
-                File file1 = new File(path);
-                System.out.println(file1.exists());
                 LOGGER.info("upload path : {}", path);
                 ctImageDao.addCTImage(ctImage, responseMsg -> {
                     if (responseMsg.getCode().getCode() == HttpCode.OK.getCode()) {
@@ -77,7 +72,6 @@ public class UploadHandler {
     public Handler<RoutingContext> getCTImage(){
         return  ctx -> {
             String image = ctx.request().getParam("image");
-            System.out.println(image);
             HttpServerResponse response = ctx.response();
             response.setChunked(true);
             response.sendFile(AppUtil.getUploadDir() + File.separator + image);

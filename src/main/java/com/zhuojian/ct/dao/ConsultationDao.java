@@ -101,6 +101,7 @@ public class ConsultationDao {
                         LOGGER.error("insert data failed!");
                         consultationsHandler.handle(null);
                     }
+                    JDBCConnUtil.close(conn);
                 });
             }
         });

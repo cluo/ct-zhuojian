@@ -5,11 +5,15 @@ import com.zhuojian.ct.verticle.WebServer;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.ext.dropwizard.DropwizardMetricsOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by wuhaitao on 2016/2/25.
  */
 public class App {
+    private static Logger LOGGER = LoggerFactory.getLogger(App.class);
+
     public static void main(String[] args) {
         VertxOptions options = new VertxOptions();
         // 设置工作线程
@@ -23,7 +27,7 @@ public class App {
         /** 添加钩子函数,保证vertx的正常关闭 */
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             vertx.close();
-            System.out.println("server stop success!");
+            LOGGER.info("server stop success!");
         }));
     }
 }

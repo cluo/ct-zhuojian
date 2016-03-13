@@ -30,7 +30,6 @@ public class CTImageHandler {
     public Handler<RoutingContext> getCTImages(){
         return  ctx -> {
             int id = Integer.parseInt(ctx.request().getParam("id"));
-            System.out.println(id);
             ctImageDao.getCTImages(id, result -> {
                 JsonArray cts = new JsonArray();
                 if (result != null) {
@@ -55,7 +54,6 @@ public class CTImageHandler {
     public Handler<RoutingContext> getCTImage(){
         return  ctx -> {
             int id = Integer.parseInt(ctx.request().getParam("id"));
-            System.out.println(id);
             ctImageDao.getCTImageById(id, ctImage -> {
                 JsonObject obj = new JsonObject();
                 if (ctImage != null) {
@@ -78,8 +76,6 @@ public class CTImageHandler {
             JsonObject data = ctx.getBodyAsJson();
             int id = data.getInteger("id");
             String diagnosis = data.getString("diagnosis");
-            System.out.println(id);
-            System.out.println(diagnosis);
             CTImage ctImage = new CTImage();
             ctImage.setId(id);
             ctImage.setDiagnosis(diagnosis);
