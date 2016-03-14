@@ -16,12 +16,11 @@ import java.util.Iterator;
  */
 public class DicomReaderImpl implements DicomReader {
     @Override
-    public int[][] readDicomImageData(String filePath) throws IOException {
-        File f = new File(filePath);
+    public int[][] readDicomImageData(File file) throws IOException {
         Iterator readers = ImageIO.getImageReadersByFormatName("dicom");
         fr.apteryx.imageio.dicom.DicomReader reader = (fr.apteryx.imageio.dicom.DicomReader) readers.next();
         reader.addIIOReadWarningListener(new WarningListener());
-            reader.setInput(new FileImageInputStream(f));
+            reader.setInput(new FileImageInputStream(file));
             DicomMetadata dmd = reader.getDicomMetadata();
             int number = 0;
             BufferedImage bi_stored = reader.read(number);
@@ -40,14 +39,14 @@ public class DicomReaderImpl implements DicomReader {
     }
 
         @Override
-    public int[][] readTmp384Data(String filePath, int[] x, int[] y) throws IOException {
+    public int[][] readTmp384Data(File file, int[] x, int[] y) throws IOException {
         if (x.length != 2 || y.length != 2) {
             throw new IllegalArgumentException("x/y coordinate length must be two dimension.");
         }
         if ((x[1] - x[0]) != 384 || (y[1] - y[0]) != 384) {
             throw new IllegalArgumentException("the start of x/y must be 384 in this method");
         }
-        int[][] origin = readDicomImageData(filePath);
+        int[][] origin = readDicomImageData(file);
         int[][] result = new int[384][384];
         for (int xLabel = x[0]; xLabel < x[1]; xLabel ++ ) {
             for (int yLabel = y[0]; yLabel < y[1]; yLabel ++) {
@@ -58,29 +57,20 @@ public class DicomReaderImpl implements DicomReader {
     }
 
     @Override
-    public int[][] readTmp128Data(String filePath, int[] x, int[] y) throws IOException {
+    public int[][] readTmp128Data(File file, int[] x, int[] y) throws IOException {
         if (x.length != 2 || y.length != 2) {
             throw new IllegalArgumentException("x/y coordinate length must be two dimension.");
         }
-        if ((x[1] - x[0]) != 128 || (y[1] - y[0]) != 128) {
-            throw new IllegalArgumentException("the start of x/y must be 128 in this method");
+        if ((x[1] - x[0]) != 384 || (y[1] - y[0]) != 384) {
+            throw new IllegalArgumentException("the start of x/y must be 384 in this method");
         }
-        int[][] origin = readDicomImageData(filePath);
+        int[][] origin = readDicomImageData(file);
         int[][] result = new int[128][128];
-        for (int xLabel = x[0]; xLabel < x[1]; xLabel += 3 ) {
-            for (int yLabel = y[0]; yLabel < y[1]; yLabel +=3) {
-                result[yLabel - y[0]][xLabel - x[0]] = origin[xLabel][yLabel];
+        for (int yLabel = y[0]; yLabel < y[1]; yLabel +=3) {
+            for (int xLabel = x[0]; xLabel < x[1]; xLabel += 3 ) {
+                result[(yLabel - y[0]) / 3][(xLabel - x[0]) / 3] = origin[xLabel][yLabel];
             }
         }
         return result;
-    }
-
-    public static void main(String[] args) throws Exception {
-        int[] x = {1, 385};
-        int[] y= {2, 386};
-        DicomReader reader = new DicomReaderImpl();
-        reader.readDicomImageData("/a.dcm");
-        reader.readTmp384Data("/a.dcm", x, y);
-        reader.readTmp128Data("/a.dcm", x, y);
     }
 }
