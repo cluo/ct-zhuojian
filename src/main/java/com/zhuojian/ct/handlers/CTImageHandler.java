@@ -50,6 +50,18 @@ public class CTImageHandler {
         };
     }
 
+    @RouteMapping(method = RouteMethod.GET, value = "/deleteCT/:id")
+    public Handler<RoutingContext> deleteCTImageById(){
+        return  ctx -> {
+            int id = Integer.parseInt(ctx.request().getParam("id"));
+            ctImageDao.deleteCTImageById(id, result -> {
+                HttpServerResponse response = ctx.response();
+                response.setChunked(true);
+                response.setStatusCode(result.getCode().getCode()).end(result.getMsg());
+            });
+        };
+    }
+
     @RouteMapping(method = RouteMethod.GET, value = "/record/:id")
     public Handler<RoutingContext> getCTImage(){
         return  ctx -> {

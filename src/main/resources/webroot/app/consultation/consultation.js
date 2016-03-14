@@ -38,6 +38,10 @@ angular.module('consultation',['ui.router', 'record', 'ct.area'])
         service.getCTImages = function(id){
             return $http.get('/api/consultation/'+id);
         };
+
+        service.deleteCT = function(id){
+            return $http.get('/api/consultation/deleteCT/'+id);
+        };
     })
     .controller('CTImageCtrl', function($scope, $state, $stateParams, CTImageService){
         var id = $stateParams.id;
@@ -59,6 +63,27 @@ angular.module('consultation',['ui.router', 'record', 'ct.area'])
                 'diagnosis':ctImage.diagnosis,
                 'consultationId':ctImage.consultationId
             });
+        };
+
+        $scope.deleteCT = function(ctId){
+            CTImageService.deleteCT(ctId)
+                .then(function(result){
+                    console.log(result.data);
+                    $scope.ctImages.forEach(function(r, i) {
+                        if(ctId === r.id)
+                            $scope.ctImages.splice(i, 1);
+                    });
+                    /*$scope.$apply();*/
+                    /*var length = $scope.ctImages.length;
+                    for(var i=0;i<length;i++){
+                        if($scope.ctImages[i].id == ctId){
+                            $scope.ctImages.slice(i,1);
+                            break;
+                        }
+                    }*/
+                },function(error){
+                    console.log(error);
+                });
         };
         getCTImages(id);
     })

@@ -3,6 +3,7 @@ package com.zhuojian.ct.verticle;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zhuojian.ct.algorithm.feature.ImageFeature;
 import com.zhuojian.ct.algorithm.randomforest.RandomForest;
+import com.zhuojian.ct.dao.FeatureDao;
 import com.zhuojian.ct.utils.Constants;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpServer;
@@ -41,7 +42,16 @@ public class LesionRecognitionServer extends AbstractVerticle {
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
         }
-        List<Double[]> data = new ArrayList<>(300);
+        FeatureDao featureDao = new FeatureDao(vertx);
+        RandomForest randomforest = new RandomForest(50, 4);
+        featureDao.fetchFeatureSamples(samples -> {
+            if (samples == null){
+                throw new RuntimeException("cannot get samples!");
+            }
+            randomforest.createForest(samples);
+            LOGGER.info("LesionRecognitionServer started!");
+        });
+        /*List<Double[]> data = new ArrayList<>(300);
         String filePath = "feature";
         try {
             String encoding="UTF-8";
@@ -63,7 +73,8 @@ public class LesionRecognitionServer extends AbstractVerticle {
             e.printStackTrace();
         }
         RandomForest randomforest = new RandomForest(50, 5);
-        randomforest.createForest(data);
+        randomforest.createForest(data);*/
+
 
         HttpServer server = vertx.createHttpServer();
         Router router = Router.router(vertx);
@@ -98,6 +109,6 @@ public class LesionRecognitionServer extends AbstractVerticle {
             }
         });*/
         server.requestHandler(router::accept).listen(8081);
-        System.out.println("LesionRecognitionServer started!");
+       /* System.out.println("LesionRecognitionServer started!");*/
     }
 }
