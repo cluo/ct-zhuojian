@@ -39,7 +39,7 @@ public class DicomReaderImpl implements DicomReader {
         return data;
     }
 
-        @Override
+    @Override
     public int[][] readTmp384Data(String filePath, int[] x, int[] y) throws IOException {
         if (x.length != 2 || y.length != 2) {
             throw new IllegalArgumentException("x/y coordinate length must be two dimension.");

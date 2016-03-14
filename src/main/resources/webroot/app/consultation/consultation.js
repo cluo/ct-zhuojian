@@ -1,7 +1,7 @@
 /**
  * Created by wuhaitao on 2016/3/9.
  */
-angular.module('consultation',['ui.router', 'record', 'ct.area'])
+angular.module('consultation',['ui.router', 'record', 'ct.area', 'tm.pagination'])
     .config(function($stateProvider, $urlRouterProvider){
         $stateProvider.state('consultation', {
             url: '/consultation',
@@ -20,6 +20,9 @@ angular.module('consultation',['ui.router', 'record', 'ct.area'])
         service.getConsultations = function(){
             return $http.get('/api/consultation');
         };
+        service.getConsultationsByPage = function(postData){
+            return $http.post('/api/consultation/page', postData);
+        };
     })
     .controller('ConsultationCtrl', function($scope, ConsultationService){
         function getConsultations(){
@@ -31,7 +34,33 @@ angular.module('consultation',['ui.router', 'record', 'ct.area'])
                 });
         }
 
-        getConsultations();
+        var getConsultationsByPage = function(){
+            var postData = {
+                'pageIndex': parseInt($scope.paginationConf.currentPage),
+                'pageSize': parseInt($scope.paginationConf.itemsPerPage)
+            }
+            ConsultationService.getConsultationsByPage(postData)
+                .then(function(result){
+                    $scope.consultations = result.data.consultations;
+                    $scope.paginationConf.totalItems = result.data.count;
+                    console.log($scope.consultations);
+                    console.log($scope.paginationConf.totalItems);
+                },function(error){
+                    console.log(error);
+                });
+        };
+
+        //配置分页基本参数
+        $scope.paginationConf = {
+            currentPage: 1,
+            itemsPerPage: 5,
+            pagesLength: 5
+        };
+
+        /*getConsultations();*/
+        getConsultationsByPage();
+
+        $scope.$watch('paginationConf.currentPage + paginationConf.itemsPerPage', getConsultationsByPage);
     })
     .service('CTImageService', function($http){
         var service = this;
@@ -41,6 +70,10 @@ angular.module('consultation',['ui.router', 'record', 'ct.area'])
 
         service.deleteCT = function(id){
             return $http.get('/api/consultation/deleteCT/'+id);
+        };
+
+        service.getCTImagesByPage = function(postData){
+            return $http.post('/api/consultation/ct/page', postData);
         };
     })
     .controller('CTImageCtrl', function($scope, $state, $stateParams, CTImageService){
@@ -53,6 +86,23 @@ angular.module('consultation',['ui.router', 'record', 'ct.area'])
                     console.log(error);
                 });
         }
+
+        var getCTImagesByPage = function(){
+            var postData = {
+                'id': parseInt(id),
+                'pageIndex': parseInt($scope.paginationConf.currentPage),
+                'pageSize': parseInt($scope.paginationConf.itemsPerPage)
+            }
+            CTImageService.getCTImagesByPage(postData)
+                .then(function(result){
+                    $scope.ctImages = result.data.ct;
+                    $scope.paginationConf.totalItems = result.data.count;
+                    console.log($scope.ctImages);
+                    console.log($scope.paginationConf.totalItems);
+                },function(error){
+                    console.log(error);
+                });
+        };
 
         $scope.goCAD = function(ctImage){
             console.log(ctImage);
@@ -85,7 +135,23 @@ angular.module('consultation',['ui.router', 'record', 'ct.area'])
                     console.log(error);
                 });
         };
-        getCTImages(id);
+        /*getCTImages(id);*/
+
+
+        //配置分页基本参数
+        $scope.paginationConf = {
+            currentPage: 1,
+            itemsPerPage: 5,
+            pagesLength: 5
+        };
+
+        getCTImagesByPage();
+
+        /***************************************************************
+         当页码和页面记录数发生变化时监控后台查询
+         如果把currentPage和itemsPerPage分开监控的话则会触发两次后台事件。
+         ***************************************************************/
+        $scope.$watch('paginationConf.currentPage + paginationConf.itemsPerPage', getCTImagesByPage);
     })
     .filter('type', function(){
         return function(e){

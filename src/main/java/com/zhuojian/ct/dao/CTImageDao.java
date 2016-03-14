@@ -235,4 +235,39 @@ public class CTImageDao {
             });
         });
     }
+
+    public void getCTImagesByPage(int consultationId, int pageIndex, int pageSize, Handler<JsonObject> ctsHandler){
+        sqlite.getConnection(connection -> {
+            if (connection.failed()){
+                LOGGER.error("connection sqlite failed!");
+                ctsHandler.handle(null);
+            }
+            else{
+                SQLConnection conn = connection.result();
+                JsonArray params = new JsonArray().add(consultationId).add(pageSize).add((pageIndex-1)*pageSize);
+                conn.queryWithParams("select * from ct where consultationId = ? limit ? offset ?", params, result -> {
+                    if (result.succeeded()) {
+                        List<JsonObject> objs = result.result().getRows();
+                        JsonObject res = new JsonObject();
+                        res.put("ct", objs);
+                        conn.query("select count(*) from ct where consultationId = "+consultationId, count -> {
+                            if (count.succeeded()) {
+                                int sum = count.result().getRows().get(0).getInteger("count(*)");
+                                res.put("count", sum);
+                                ctsHandler.handle(res);
+                            }
+                            else{
+                                ctsHandler.handle(null);
+                            }
+                        });
+
+                    } else {
+                        LOGGER.error("get ct data by page failed!");
+                        ctsHandler.handle(null);
+                    }
+                    JDBCConnUtil.close(conn);
+                });
+            }
+        });
+    }
 }

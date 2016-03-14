@@ -49,5 +49,6 @@
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.9" level="project" />
     <orderEntry type="library" name="Maven: io.vertx:vertx-dropwizard-metrics:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard.metrics:metrics-core:3.1.0" level="project" />
+    <orderEntry type="library" name="Maven: cn.edu.zju.isee.lab508:dicom:1.0.0" level="project" />
   </component>
 </module>
