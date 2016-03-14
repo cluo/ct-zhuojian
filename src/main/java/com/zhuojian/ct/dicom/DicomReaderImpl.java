@@ -1,16 +1,46 @@
 package com.zhuojian.ct.dicom;
 
+import fr.apteryx.imageio.dicom.DicomMetadata;
+
+import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageInputStream;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
+import java.awt.image.Raster;
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
+
 /**
  * Created by jql on 2016/3/14.
  */
 public class DicomReaderImpl implements DicomReader {
     @Override
-    public int[][] readDicomImageData(String filePath) {
-        return new int[0][];
+    public int[][] readDicomImageData(String filePath) throws IOException {
+        File f = new File(filePath);
+        Iterator readers = ImageIO.getImageReadersByFormatName("dicom");
+        fr.apteryx.imageio.dicom.DicomReader reader = (fr.apteryx.imageio.dicom.DicomReader) readers.next();
+        reader.addIIOReadWarningListener(new WarningListener());
+            reader.setInput(new FileImageInputStream(f));
+            DicomMetadata dmd = reader.getDicomMetadata();
+            int number = 0;
+            BufferedImage bi_stored = reader.read(number);
+            BufferedImage bi = dmd.applyGrayscaleTransformations(bi_stored, number);
+            Raster raster = bi.getData();
+            int height = raster.getHeight();
+            int weight = raster.getWidth();
+            DataBuffer dataBuffer = raster.getDataBuffer();
+            int [][] data = new int[height][weight];
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < weight; j++) {
+                    data[i][j] = dataBuffer.getElem(i + j);
+                }
+            }
+        return data;
     }
 
-    @Override
-    public int[][] readTmp384Data(String filePath, int[] x, int[] y) {
+        @Override
+    public int[][] readTmp384Data(String filePath, int[] x, int[] y) throws IOException {
         if (x.length != 2 || y.length != 2) {
             throw new IllegalArgumentException("x/y coordinate length must be two dimension.");
         }
@@ -28,7 +58,7 @@ public class DicomReaderImpl implements DicomReader {
     }
 
     @Override
-    public int[][] readTmp128Data(String filePath, int[] x, int[] y) {
+    public int[][] readTmp128Data(String filePath, int[] x, int[] y) throws IOException {
         if (x.length != 2 || y.length != 2) {
             throw new IllegalArgumentException("x/y coordinate length must be two dimension.");
         }
@@ -43,5 +73,14 @@ public class DicomReaderImpl implements DicomReader {
             }
         }
         return result;
+    }
+
+    public static void main(String[] args) throws Exception {
+        int[] x = {1, 385};
+        int[] y= {2, 386};
+        DicomReader reader = new DicomReaderImpl();
+        reader.readDicomImageData("/a.dcm");
+        reader.readTmp384Data("/a.dcm", x, y);
+        reader.readTmp128Data("/a.dcm", x, y);
     }
 }
