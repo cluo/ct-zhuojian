@@ -5,7 +5,6 @@ import com.zhuojian.ct.annotations.RouteMapping;
 import com.zhuojian.ct.annotations.RouteMethod;
 import com.zhuojian.ct.dao.CTImageDao;
 import com.zhuojian.ct.model.CTImage;
-import com.zhuojian.ct.model.HttpCode;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonArray;
@@ -31,7 +30,6 @@ public class CTImageHandler {
     public Handler<RoutingContext> getCTImages(){
         return  ctx -> {
             int id = Integer.parseInt(ctx.request().getParam("id"));
-            System.out.println(id);
             ctImageDao.getCTImages(id, result -> {
                 JsonArray cts = new JsonArray();
                 if (result != null) {
@@ -56,7 +54,6 @@ public class CTImageHandler {
     public Handler<RoutingContext> getCTImage(){
         return  ctx -> {
             int id = Integer.parseInt(ctx.request().getParam("id"));
-            System.out.println(id);
             ctImageDao.getCTImageById(id, ctImage -> {
                 JsonObject obj = new JsonObject();
                 if (ctImage != null) {
@@ -79,8 +76,6 @@ public class CTImageHandler {
             JsonObject data = ctx.getBodyAsJson();
             int id = data.getInteger("id");
             String diagnosis = data.getString("diagnosis");
-            System.out.println(id);
-            System.out.println(diagnosis);
             CTImage ctImage = new CTImage();
             ctImage.setId(id);
             ctImage.setDiagnosis(diagnosis);

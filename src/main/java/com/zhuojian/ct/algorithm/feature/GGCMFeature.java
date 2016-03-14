@@ -33,8 +33,9 @@ public class GGCMFeature implements Feature{
         // 逆差矩 T15
 
         int gray=256;
-        URL url = GGCMFeature.class.getClassLoader().getResource("webroot/" + image);
-        File file = new File(URLDecoder.decode(url.getFile(), "UTF-8"));
+        /*URL url = GGCMFeature.class.getClassLoader().getResource("webroot/" + image);
+        File file = new File(URLDecoder.decode(url.getFile(), "UTF-8"));*/
+        File file = new File(image);
         BufferedImage bi = ImageIO.read(file);
         int C = x2-x1+1;
         int R = y2-y1+1;

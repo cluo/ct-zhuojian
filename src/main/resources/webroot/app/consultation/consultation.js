@@ -2,7 +2,7 @@
  * Created by wuhaitao on 2016/3/9.
  */
 angular.module('consultation',['ui.router', 'record', 'ct.area'])
-    .config(function($stateProvider){
+    .config(function($stateProvider, $urlRouterProvider){
         $stateProvider.state('consultation', {
             url: '/consultation',
             templateUrl: 'app/consultation/consultations.html',
@@ -13,6 +13,7 @@ angular.module('consultation',['ui.router', 'record', 'ct.area'])
             templateUrl: 'app/consultation/ctimages.html',
             controller: 'CTImageCtrl'
         });
+        $urlRouterProvider.otherwise('/consultation');
     })
     .service('ConsultationService', function($http){
         var service = this;

@@ -72,6 +72,8 @@ angular.module('ct.area', ['ui.router'])
         console.log($stateParams)
         var x1,x2,y1,y2;
 
+        $scope.addFeatureResult = '';
+
         $scope.myImage=$stateParams.file;
         $scope.myCroppedImage='';
 
@@ -104,12 +106,27 @@ angular.module('ct.area', ['ui.router'])
                 console.log(error);
             });
         };
+        $scope.addFeatureData = function () {
+            $http.post('/api/ct/addfeature',{
+                "image":$scope.myImage,
+                "x1":x1,
+                "y1":y1,
+                "x2":x2,
+                "y2":y2,
+                "label":$scope.result
+            }).then(function (result) {
+                $scope.addFeatureResult = result.data.result;
+            }, function (error) {
+                console.log(error);
+            });
+        };
 
         $scope.areaChange = function(c) {
             x1 = c.x;
             y1 = c.y;
             x2 = c.x2;
             y2 = c.y2;
+            $scope.addFeatureResult = '';
             angular.element(document.querySelector('#x1')).val(c.x);
             angular.element(document.querySelector('#y1')).val(c.y);
             angular.element(document.querySelector('#x2')).val(c.x2);

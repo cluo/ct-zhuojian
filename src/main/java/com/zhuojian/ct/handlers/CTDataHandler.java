@@ -1,16 +1,17 @@
 package com.zhuojian.ct.handlers;
 
+import com.zhuojian.ct.algorithm.feature.ImageFeature;
 import com.zhuojian.ct.annotations.RouteHandler;
 import com.zhuojian.ct.annotations.RouteMapping;
 import com.zhuojian.ct.annotations.RouteMethod;
+import com.zhuojian.ct.dao.FeatureDao;
+import com.zhuojian.ct.model.HttpCode;
 import com.zhuojian.ct.utils.FileUtil;
-import com.zhuojian.ct.utils.ImageUtil;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
@@ -19,7 +20,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -32,6 +32,11 @@ import java.net.URISyntaxException;
 public class CTDataHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(CTDataHandler.class);
     private CloseableHttpClient httpClient = HttpClients.createDefault();
+    private FeatureDao featureDao;
+
+    public CTDataHandler(FeatureDao featureDao) {
+        this.featureDao = featureDao;
+    }
 
     @RouteMapping(method = RouteMethod.GET)
     public Handler<RoutingContext> list() {
@@ -123,6 +128,37 @@ public class CTDataHandler {
             } catch (IOException e) {
                 e.printStackTrace();
                 ctx.response().setStatusCode(500).end();
+            }
+        };
+    }
+
+    @RouteMapping(value = "/addfeature", method = RouteMethod.POST)
+    public Handler<RoutingContext> addfeature() {
+        return ctx -> {
+            JsonObject data = ctx.getBodyAsJson();
+            String image = data.getString("image");
+            int x1 = data.getInteger("x1");
+            int y1 = data.getInteger("y1");
+            int x2 = data.getInteger("x2");
+            int y2 = data.getInteger("y2");
+            String label = data.getString("label");
+            ImageFeature imageFeature = new ImageFeature();
+            JsonObject result = new JsonObject();
+            try {
+                double[] feature = imageFeature.getFeature(image, x1, y1, x2, y2);
+                featureDao.addFeature(feature, label, res -> {
+                    if ("success".equals(res)){
+                        result.put("result", "特征入库成功");
+                        ctx.response().setChunked(true).setStatusCode(HttpCode.OK.getCode()).end(result.encode());
+                    }
+                    else{
+                        result.put("result", res);
+                        ctx.response().setChunked(true).setStatusCode(HttpCode.INTERNAL_SERVER_ERROR.getCode()).end(result.encode());
+                    }
+                });
+            } catch (IOException e) {
+                result.put("result", e.getMessage());
+                ctx.response().setChunked(true).setStatusCode(HttpCode.NOT_FOUND.getCode()).end(result.encode());
             }
         };
     }

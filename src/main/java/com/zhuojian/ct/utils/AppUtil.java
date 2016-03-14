@@ -90,16 +90,16 @@ public class AppUtil {
     }
 
     public static String getUploadDir() {
-        /*return AppUtil.configStr("upload.path") == null ?
-                BodyHandler.DEFAULT_UPLOADS_DIRECTORY : AppUtil.configStr("upload.path");*/
-        try {
+        return AppUtil.configStr("upload.path") == null ?
+                BodyHandler.DEFAULT_UPLOADS_DIRECTORY : AppUtil.configStr("upload.path");
+        /*try {
             String path = URLDecoder.decode(AppUtil.class.getClassLoader().getResource("webroot").getPath(), "UTF-8");
             return AppUtil.configStr("upload.path") == null ?
                     BodyHandler.DEFAULT_UPLOADS_DIRECTORY : path + File.separator + AppUtil.configStr("upload.path");
         } catch (UnsupportedEncodingException e) {
             LOGGER.error(e.getMessage(), e);
             return BodyHandler.DEFAULT_UPLOADS_DIRECTORY;
-        }
+        }*/
     }
 
 }

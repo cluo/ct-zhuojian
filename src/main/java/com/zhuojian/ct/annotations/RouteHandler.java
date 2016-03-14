@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Created by wuhaitao on 2015/12/10.
+ * 标识需要使用的Handler
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

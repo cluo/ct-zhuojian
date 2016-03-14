@@ -8,7 +8,6 @@ import com.zhuojian.ct.model.Consultation;
 import com.zhuojian.ct.model.HttpCode;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServerResponse;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;

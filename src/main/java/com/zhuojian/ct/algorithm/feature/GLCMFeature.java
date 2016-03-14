@@ -20,8 +20,9 @@ public class GLCMFeature implements Feature{
         //f4:对比度
         //f5:逆差矩
         //f6:和方差
-        URL url = GLCMFeature.class.getClassLoader().getResource("webroot/" + image);
-        File file = new File(URLDecoder.decode(url.getFile(), "UTF-8"));
+        /*URL url = GLCMFeature.class.getClassLoader().getResource("webroot/" + image);
+        File file = new File(URLDecoder.decode(url.getFile(), "UTF-8"));*/
+        File file = new File(image);
         BufferedImage bi = ImageIO.read(file);
         int C = x2-x1+1;
         int R = y2-y1+1;

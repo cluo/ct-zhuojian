@@ -1,8 +1,11 @@
 package com.zhuojian.ct.dao;
 
+import com.zhuojian.ct.annotations.HandlerDao;
 import com.zhuojian.ct.model.CTImage;
 import com.zhuojian.ct.model.HttpCode;
 import com.zhuojian.ct.model.ResponseMsg;
+import com.zhuojian.ct.utils.AppUtil;
+import com.zhuojian.ct.utils.JDBCConnUtil;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
@@ -12,13 +15,14 @@ import io.vertx.ext.sql.SQLConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by wuhaitao on 2016/3/10.
  */
+@HandlerDao
 public class CTImageDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(CTImageDao.class);
 
@@ -26,10 +30,10 @@ public class CTImageDao {
 
     public CTImageDao(Vertx vertx) throws UnsupportedEncodingException {
         /*String db = URLDecoder.decode(CTImageDao.class.getClassLoader().getResource("webroot/db/zhuojian").getFile(), "UTF-8");*/
-        String db = "E:/毕业论文/JavaProject/ct-zhuojian/src/main/resources/webroot/db/zhuojian";
+        /*String db = "E:/毕业论文/JavaProject/ct-zhuojian/src/main/resources/webroot/db/zhuojian";*/
         JsonObject sqliteConfig = new JsonObject()
-                .put("url", "jdbc:sqlite:"+db)
-                .put("driver_class", "org.sqlite.JDBC");
+                .put("url", AppUtil.configStr("db.url"))
+                .put("driver_class", AppUtil.configStr("db.driver_class"));
         sqlite = JDBCClient.createShared(vertx, sqliteConfig, "ct");
     }
 
@@ -49,7 +53,7 @@ public class CTImageDao {
                             for (JsonObject obj : objs) {
                                 ctImage = new CTImage();
                                 ctImage.setId(obj.getInteger("id"));
-                                ctImage.setType(obj.getInteger("type") == 1 ? "肝脏" : "肺部");
+                                ctImage.setType(obj.getString("type"));
                                 ctImage.setFile(obj.getString("file"));
                                 ctImage.setDiagnosis(obj.getString("diagnosis"));
                                 ctImage.setConsultationId(obj.getInteger("consultationId"));
@@ -65,6 +69,7 @@ public class CTImageDao {
                         LOGGER.error("get ctimage by id failed!");
                         ctImageHandler.handle(null);
                     }
+                    JDBCConnUtil.close(conn);
                 });
             }
         });
@@ -88,7 +93,7 @@ public class CTImageDao {
                             for (JsonObject obj : objs) {
                                 ctImage = new CTImage();
                                 ctImage.setId(obj.getInteger("id"));
-                                ctImage.setType(obj.getInteger("type") == 1 ? "肝脏" : "肺部");
+                                ctImage.setType(obj.getString("type"));
                                 ctImage.setFile(obj.getString("file"));
                                 ctImage.setDiagnosis(obj.getString("diagnosis"));
                                 ctImage.setConsultationId(obj.getInteger("consultationId"));
@@ -102,6 +107,7 @@ public class CTImageDao {
                         LOGGER.error("insert data failed!");
                         ctsHandler.handle(null);
                     }
+                    JDBCConnUtil.close(conn);
                 });
             }
         });
@@ -120,16 +126,42 @@ public class CTImageDao {
             String sql = "insert into ct(type,file,diagnosis,consultationId) values(?,?,?,?)";
             conn.updateWithParams(sql, params, insertResult -> {
                 if (insertResult.succeeded()){
-                    /*System.out.println("insert data success!");*/
                     LOGGER.info("insert data success!");
                     responseMsgHandler.handle(new ResponseMsg(HttpCode.OK, "insert ct success!"));
                 }
                 else{
-                    /*System.out.println("insert data failed!");*/
                     LOGGER.error("insert data failed!");
                     responseMsgHandler.handle(new ResponseMsg(HttpCode.INTERNAL_SERVER_ERROR, "sqlite insert data failed!"));
                 }
             });
+        });
+    }
+
+    public void addCTImages(List<CTImage> ctImages, Handler<ResponseMsg> responseMsgHandler){
+        sqlite.getConnection(connection -> {
+            if (connection.failed()){
+                LOGGER.error("connection sqlite failed!");
+                responseMsgHandler.handle(new ResponseMsg(HttpCode.INTERNAL_SERVER_ERROR, "sqlite connected failed!"));
+                return;
+            }
+            ResponseMsg responseMsg = new ResponseMsg(HttpCode.OK, "upload ct files success!");
+            LOGGER.info("start receive file");
+            SQLConnection conn = connection.result();
+            for (CTImage ctImage:ctImages) {
+                JsonArray params = new JsonArray().add(ctImage.getType()).add(ctImage.getFile()).add(ctImage.getDiagnosis()).add(ctImage.getConsultationId());
+                String sql = "insert into ct(type,file,diagnosis,consultationId) values(?,?,?,?)";
+                conn.updateWithParams(sql, params, insertResult -> {
+                    /*JDBCConnUtil.close(conn);*/
+                    LOGGER.info("receive file");
+                    if (insertResult.failed()) {
+                        LOGGER.info("insert ct {} failed!", ctImage.getFile());
+                        /*responseMsg.setCode(HttpCode.INTERNAL_SERVER_ERROR);
+                        responseMsg.setMsg("upload ct files occurs sqlite exception!");*/
+                    }
+                });
+            }
+            LOGGER.info("receive file finished");
+            responseMsgHandler.handle(responseMsg);
         });
     }
 

@@ -1,8 +1,10 @@
 package com.zhuojian.ct.dao;
 
+import com.zhuojian.ct.annotations.HandlerDao;
 import com.zhuojian.ct.model.Consultation;
 import com.zhuojian.ct.model.HttpCode;
 import com.zhuojian.ct.model.ResponseMsg;
+import com.zhuojian.ct.utils.AppUtil;
 import com.zhuojian.ct.utils.JDBCConnUtil;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
@@ -13,9 +15,7 @@ import io.vertx.ext.sql.SQLConnection;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,6 +24,7 @@ import java.util.List;
 /**
  * Created by wuhaitao on 2016/3/8.
  */
+@HandlerDao
 public class ConsultationDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConsultationDao.class);
 
@@ -31,10 +32,10 @@ public class ConsultationDao {
 
     public ConsultationDao(Vertx vertx) throws UnsupportedEncodingException {
         /*String db = URLDecoder.decode(ConsultationDao.class.getClassLoader().getResource("webroot/db/zhuojian").getFile(), "UTF-8");*/
-        String db = "E:/毕业论文/JavaProject/ct-zhuojian/src/main/resources/webroot/db/zhuojian";
+        /*String db = "E:/毕业论文/JavaProject/ct-zhuojian/src/main/resources/webroot/db/zhuojian";*/
         JsonObject sqliteConfig = new JsonObject()
-                .put("url", "jdbc:sqlite:"+db)
-                .put("driver_class", "org.sqlite.JDBC");
+                .put("url", AppUtil.configStr("db.url"))
+                .put("driver_class", AppUtil.configStr("db.driver_class"));
         sqlite = JDBCClient.createShared(vertx, sqliteConfig, "consultation");
     }
 
@@ -100,6 +101,7 @@ public class ConsultationDao {
                         LOGGER.error("insert data failed!");
                         consultationsHandler.handle(null);
                     }
+                    JDBCConnUtil.close(conn);
                 });
             }
         });
