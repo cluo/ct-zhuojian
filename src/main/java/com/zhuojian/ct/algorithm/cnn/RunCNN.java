@@ -1,11 +1,5 @@
 package com.zhuojian.ct.algorithm.cnn;
 
-import edu.hitsz.c102c.cnn.Layer.Size;
-import edu.hitsz.c102c.dataset.DataSet;
-import edu.hitsz.c102c.util.ConcurenceRunner;
-import edu.hitsz.c102c.util.TimedTest;
-import edu.hitsz.c102c.util.TimedTest.TestTask;
-
 import java.io.IOException;
 
 public class RunCNN {
@@ -15,11 +9,11 @@ public class RunCNN {
 		String modelName = "E:\\dataset\\model.cnn";
 
 		LayerBuilder builder = new LayerBuilder();
-		builder.addLayer(Layer.buildInputLayer(new Size(28, 28)));
-		builder.addLayer(Layer.buildConvLayer(6, new Size(5, 5)));
-		builder.addLayer(Layer.buildSampLayer(new Size(2, 2)));
-		builder.addLayer(Layer.buildConvLayer(12, new Size(5, 5)));
-		builder.addLayer(Layer.buildSampLayer(new Size(2, 2)));
+		builder.addLayer(Layer.buildInputLayer(new Layer.Size(28, 28)));
+		builder.addLayer(Layer.buildConvLayer(6, new Layer.Size(5, 5)));
+		builder.addLayer(Layer.buildSampLayer(new Layer.Size(2, 2)));
+		builder.addLayer(Layer.buildConvLayer(12, new Layer.Size(5, 5)));
+		builder.addLayer(Layer.buildSampLayer(new Layer.Size(2, 2)));
 		builder.addLayer(Layer.buildOutputLayer(10));
 		CNN cnn = new CNN(builder, 10);
 		
@@ -45,7 +39,7 @@ public class RunCNN {
 
 	public static void main(String[] args) {
 
-		new TimedTest(new TestTask() {
+		new TimedTest(new TimedTest.TestTask() {
 
 			@Override
 			public void process() {

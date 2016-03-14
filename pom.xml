@@ -131,6 +131,12 @@
             <artifactId>vertx-dropwizard-metrics</artifactId>
             <version>3.0.0</version>
         </dependency>
+        <!-- added by jql: dicom reader dependency -->
+        <dependency>
+            <groupId>cn.edu.zju.isee.lab508</groupId>
+            <artifactId>dicom</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -153,6 +159,15 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <!-- added by jql: maven jdk1.8 config -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
             </plugin>
 
             <!--<plugin>

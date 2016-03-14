@@ -1,7 +1,5 @@
 package com.zhuojian.ct.algorithm.cnn;
 
-import edu.hitsz.c102c.cnn.Layer;
-
 import java.util.ArrayList;
 import java.util.List;
 
