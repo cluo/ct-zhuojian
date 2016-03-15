@@ -231,7 +231,7 @@ public class ReadDicoms {
                 if (j > MIN_START_DCM && j < MAX_END_DCM) {
                     if (j < index[0] || j > index[1]) {
                         int[] dat = new int[2];
-                        map.put(count ++, )
+                        map.put(count++, dat);
                     }
                 }
             }

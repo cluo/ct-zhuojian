@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zhuojian.ct.algorithm.feature.ImageFeature;
 import com.zhuojian.ct.algorithm.randomforest.RandomForest;
 import com.zhuojian.ct.dao.FeatureDao;
+import com.zhuojian.ct.utils.AppUtil;
 import com.zhuojian.ct.utils.Constants;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpServer;
@@ -29,6 +30,7 @@ public class LesionRecognitionServer extends AbstractVerticle {
     private static final Logger LOGGER = LoggerFactory.getLogger(LesionRecognitionServer.class);
     private ImageFeature imageFeature;
     private JsonObject lesion;
+    private Integer port = AppUtil.configInt("algorithm.server.port");
 
     @Override
     public void start() throws Exception {
@@ -49,7 +51,7 @@ public class LesionRecognitionServer extends AbstractVerticle {
                 throw new RuntimeException("cannot get samples!");
             }
             randomforest.createForest(samples);
-            LOGGER.info("LesionRecognitionServer started!");
+            LOGGER.info("RandomForest Algorithm finished!");
         });
         /*List<Double[]> data = new ArrayList<>(300);
         String filePath = "feature";
@@ -109,6 +111,6 @@ public class LesionRecognitionServer extends AbstractVerticle {
             }
         });*/
         server.requestHandler(router::accept).listen(8081);
-       /* System.out.println("LesionRecognitionServer started!");*/
+        LOGGER.info("LesionRecognitionServer started!");
     }
 }

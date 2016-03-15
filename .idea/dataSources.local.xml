@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal">
-    <data-source name="zhuojian" uuid="9e208d71-ad97-4b5a-8daf-08bec73c90d3">
+    <data-source name="Sqlite (Xerial) - zhuojian" uuid="973fdcd9-f477-4631-8046-06b5ec7dbddf">
       <secret-storage>master_key</secret-storage>
+      <auth-required>false</auth-required>
     </data-source>
   </component>
 </project>

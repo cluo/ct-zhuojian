@@ -11,9 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -26,17 +24,21 @@ public class AppUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppUtil.class);
 
-    private static final String CONFIG_NAME = "config.json";
+    private static final String CONFIG_NAME = "conf/config.json";
     private static final AppUtil me = new AppUtil();
 
     private static JsonObject config;
 
     private AppUtil() {
         try {
-            URL url = getClass().getClassLoader().getResource(CONFIG_NAME);
+            File conf = new File(CONFIG_NAME);
+            LOGGER.debug("Initialize configuration from path : {}", conf.getAbsolutePath());
+            ObjectMapper mapper = new ObjectMapper();
+            config = new JsonObject((Map<String, Object>) mapper.readValue(conf, Map.class));
+            /*URL url = getClass().getClassLoader().getResource(CONFIG_NAME);
             LOGGER.debug("Initialize configuration from path : {}", url);
             ObjectMapper mapper = new ObjectMapper();
-            config = new JsonObject((Map<String, Object>) mapper.readValue(url, Map.class));
+            config = new JsonObject((Map<String, Object>) mapper.readValue(url, Map.class));*/
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
         }

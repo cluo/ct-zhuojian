@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
-  <data-source name="zhuojian" uuid="9e208d71-ad97-4b5a-8daf-08bec73c90d3">
+  <data-source name="Sqlite (Xerial) - zhuojian" uuid="973fdcd9-f477-4631-8046-06b5ec7dbddf">
     <database-info product="SQLite" version="3.8.9" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native"/>
     <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed"/>
     <schema name="" catalog=""/>
     <table name="consultation" schema="" catalog="" type="TABLE">
-      <column name="id" sqlType="INT" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <column name="created" sqlType="VARCHAR" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="updated" sqlType="VARCHAR" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="record" sqlType="VARCHAR" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
+      <column name="id" sqlType="INT" precision="0" scale="-1" nullable="false" jdbcType="4"/>
+      <column name="created" sqlType="VARCHAR" precision="0" scale="-1" nullable="false" jdbcType="12"/>
+      <column name="updated" sqlType="VARCHAR" precision="0" scale="-1" nullable="false" jdbcType="12"/>
+      <column name="record" sqlType="VARCHAR" precision="0" scale="-1" nullable="true" jdbcType="12"/>
       <primary-key columns="id"/>
     </table>
     <table name="ct" schema="" catalog="" type="TABLE">
-      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="true" jdbcType="4"/>
-      <column name="type" sqlType="VARCHAR" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="file" sqlType="VARCHAR" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="diagnosis" sqlType="VARCHAR" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
-      <column name="consultationId" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="id" sqlType="INTEGER" precision="0" scale="-1" nullable="true" jdbcType="4"/>
+      <column name="type" sqlType="VARCHAR" precision="0" scale="-1" nullable="false" jdbcType="12"/>
+      <column name="file" sqlType="VARCHAR" precision="0" scale="-1" nullable="false" jdbcType="12"/>
+      <column name="diagnosis" sqlType="VARCHAR" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="consultationId" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
       <primary-key columns="id"/>
     </table>
     <table name="feature" schema="" catalog="" type="TABLE">
-      <column name="f1" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f2" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f3" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f4" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f5" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f6" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f7" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f8" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f9" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f10" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f11" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f12" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f13" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f14" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f15" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f16" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f17" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f18" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f19" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f20" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f21" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f22" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f23" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f24" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f25" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="f26" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="label" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="f1" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f2" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f3" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f4" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f5" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f6" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f7" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f8" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f9" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f10" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f11" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f12" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f13" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f14" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f15" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f16" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f17" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f18" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f19" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f20" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f21" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f22" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f23" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f24" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f25" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="f26" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6"/>
+      <column name="label" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
     </table>
     <table name="sqlite_sequence" schema="" catalog="" type="TABLE">
-      <column name="name" sqlType="" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
-      <column name="seq" sqlType="" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
+      <column name="name" sqlType="" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="seq" sqlType="" precision="0" scale="-1" nullable="true" jdbcType="12"/>
     </table>
   </data-source>
 </component>

@@ -33,7 +33,7 @@ public class WebServer extends AbstractVerticle {
     // Scan daos from package 'com.zhuojian.ct.dao.*'
     private static final Reflections daoReflections = new Reflections("com.zhuojian.ct.dao");
 
-    private Integer port = AppUtil.configInt("port");
+    private Integer port = AppUtil.configInt("web.server.port");
 
     protected Router router;
 
