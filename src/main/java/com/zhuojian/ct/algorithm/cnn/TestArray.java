@@ -1,8 +1,5 @@
 package com.zhuojian.ct.algorithm.cnn;
 
-import edu.hitsz.c102c.util.TimedTest.TestTask;
-
-import java.util.Locale;
 
 /**
  * ����Ԫ��ֱ�ӷ���������ͨ���������������Ч�ʣ� ���ۣ�������ʽ���ʲ�û�н����ٶ�

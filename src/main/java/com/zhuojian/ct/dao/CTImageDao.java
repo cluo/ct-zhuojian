@@ -14,6 +14,8 @@ import io.vertx.ext.jdbc.JDBCClient;
 import io.vertx.ext.sql.SQLConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +70,52 @@ public class CTImageDao {
                     else{
                         LOGGER.error("get ctimage by id failed!");
                         ctImageHandler.handle(null);
+                    }
+                    JDBCConnUtil.close(conn);
+                });
+            }
+        });
+    }
+
+    public void deleteCTImageById(int id, Handler<ResponseMsg> responseMsgHandler){
+        sqlite.getConnection(connection -> {
+            if (connection.failed()){
+                LOGGER.error("connection sqlite failed!");
+                responseMsgHandler.handle(null);
+            }
+            else{
+                SQLConnection conn = connection.result();
+                conn.query("select * from ct where id="+id, result -> {
+                    if (result.succeeded()){
+                        List<JsonObject> objs = result.result().getRows();
+                        if (objs != null && !objs.isEmpty()) {
+                            for (JsonObject obj : objs) {
+                                String image = obj.getString("file");
+                                File file = new File(image);
+                                if (file.exists()){
+                                    file.delete();
+                                }
+                                else{
+                                    LOGGER.error("ct file {} is not existing!", image);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    else{
+                        LOGGER.error("delete ctimage by id {} failed!", id);
+                        responseMsgHandler.handle(new ResponseMsg(HttpCode.INTERNAL_SERVER_ERROR, "delete ct failed!"));
+                        JDBCConnUtil.close(conn);
+                        return;
+                    }
+                });
+                conn.update("delete from ct where id = "+id, result -> {
+                    if (result.succeeded()){
+                        responseMsgHandler.handle(new ResponseMsg(HttpCode.OK, "delete ct success!"));
+                    }
+                    else{
+                        LOGGER.error("delete ctimage by id {} failed!", id);
+                        responseMsgHandler.handle(new ResponseMsg(HttpCode.INTERNAL_SERVER_ERROR, "delete ct failed!"));
                     }
                     JDBCConnUtil.close(conn);
                 });
@@ -185,6 +233,41 @@ public class CTImageDao {
                     responseMsgHandler.handle(new ResponseMsg(HttpCode.INTERNAL_SERVER_ERROR, "sqlite update ct failed!"));
                 }
             });
+        });
+    }
+
+    public void getCTImagesByPage(int consultationId, int pageIndex, int pageSize, Handler<JsonObject> ctsHandler){
+        sqlite.getConnection(connection -> {
+            if (connection.failed()){
+                LOGGER.error("connection sqlite failed!");
+                ctsHandler.handle(null);
+            }
+            else{
+                SQLConnection conn = connection.result();
+                JsonArray params = new JsonArray().add(consultationId).add(pageSize).add((pageIndex-1)*pageSize);
+                conn.queryWithParams("select * from ct where consultationId = ? limit ? offset ?", params, result -> {
+                    if (result.succeeded()) {
+                        List<JsonObject> objs = result.result().getRows();
+                        JsonObject res = new JsonObject();
+                        res.put("ct", objs);
+                        conn.query("select count(*) from ct where consultationId = "+consultationId, count -> {
+                            if (count.succeeded()) {
+                                int sum = count.result().getRows().get(0).getInteger("count(*)");
+                                res.put("count", sum);
+                                ctsHandler.handle(res);
+                            }
+                            else{
+                                ctsHandler.handle(null);
+                            }
+                        });
+
+                    } else {
+                        LOGGER.error("get ct data by page failed!");
+                        ctsHandler.handle(null);
+                    }
+                    JDBCConnUtil.close(conn);
+                });
+            }
         });
     }
 }

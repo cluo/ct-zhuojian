@@ -107,6 +107,41 @@ public class ConsultationDao {
         });
     }
 
+    public void getConsultationsByPage(int pageIndex, int pageSize, Handler<JsonObject> consultationsHandler){
+        sqlite.getConnection(connection -> {
+            if (connection.failed()){
+                LOGGER.error("connection sqlite failed!");
+                consultationsHandler.handle(null);
+            }
+            else{
+                SQLConnection conn = connection.result();
+                JsonArray params = new JsonArray().add(pageSize).add((pageIndex-1)*pageSize);
+                conn.queryWithParams("select * from consultation limit ? offset ?", params, result -> {
+                    if (result.succeeded()){
+                        List<JsonObject> objs = result.result().getRows();
+                        JsonObject res = new JsonObject();
+                        res.put("consultations", objs);
+                        conn.query("select count(*) from consultation", count -> {
+                            if (count.succeeded()) {
+                                int sum = count.result().getRows().get(0).getInteger("count(*)");
+                                res.put("count", sum);
+                                consultationsHandler.handle(res);
+                            }
+                            else{
+                                consultationsHandler.handle(null);
+                            }
+                        });
+                    }
+                    else{
+                        LOGGER.error("insert data failed!");
+                        consultationsHandler.handle(null);
+                    }
+                    JDBCConnUtil.close(conn);
+                });
+            }
+        });
+    }
+
     public void addConsultation(Consultation consultation, Handler<ResponseMsg> responseMsgHandler){
         sqlite.getConnection(connection -> {
             if (connection.failed()){

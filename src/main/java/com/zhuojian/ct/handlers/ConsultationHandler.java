@@ -50,6 +50,26 @@ public class ConsultationHandler {
         };
     }
 
+    @RouteMapping(method = RouteMethod.POST, value = "/page")
+    public Handler<RoutingContext> getConsultationsByPage(){
+        return  ctx -> {
+            JsonObject data = ctx.getBodyAsJson();
+            int pageIndex = data.getInteger("pageIndex");
+            int pageSize = data.getInteger("pageSize");
+            consultationDao.getConsultationsByPage(pageIndex, pageSize, result -> {
+                JsonArray cts = new JsonArray();
+                HttpServerResponse response = ctx.response();
+                response.setChunked(true);
+                if (result != null){
+                    response.end(result.encode());
+                }
+                else {
+                    response.setStatusCode(HttpCode.NULL_CONTENT.getCode()).end();
+                }
+            });
+        };
+    }
+
     @RouteMapping(method = RouteMethod.POST, value = "/add")
     public Handler<RoutingContext> addConsultation(){
         return ctx -> {

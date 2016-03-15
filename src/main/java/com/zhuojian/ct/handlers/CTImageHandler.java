@@ -5,13 +5,17 @@ import com.zhuojian.ct.annotations.RouteMapping;
 import com.zhuojian.ct.annotations.RouteMethod;
 import com.zhuojian.ct.dao.CTImageDao;
 import com.zhuojian.ct.model.CTImage;
+import com.zhuojian.ct.model.HttpCode;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServerResponse;
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * Created by wuhaitao on 2016/3/10.
@@ -50,6 +54,18 @@ public class CTImageHandler {
         };
     }
 
+    @RouteMapping(method = RouteMethod.GET, value = "/deleteCT/:id")
+    public Handler<RoutingContext> deleteCTImageById(){
+        return  ctx -> {
+            int id = Integer.parseInt(ctx.request().getParam("id"));
+            ctImageDao.deleteCTImageById(id, result -> {
+                HttpServerResponse response = ctx.response();
+                response.setChunked(true);
+                response.setStatusCode(result.getCode().getCode()).end(result.getMsg());
+            });
+        };
+    }
+
     @RouteMapping(method = RouteMethod.GET, value = "/record/:id")
     public Handler<RoutingContext> getCTImage(){
         return  ctx -> {
@@ -83,6 +99,32 @@ public class CTImageHandler {
                 HttpServerResponse response = ctx.response();
                 response.setChunked(true);
                 response.setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getMsg());
+            });
+        };
+    }
+
+    @RouteMapping(method = RouteMethod.POST, value = "/ct/page")
+    public Handler<RoutingContext> getCTImagesByPage(){
+        return  ctx -> {
+            JsonObject data = ctx.getBodyAsJson();
+            int id = data.getInteger("id");
+            int pageIndex = data.getInteger("pageIndex");
+            int pageSize = data.getInteger("pageSize");
+            ctImageDao.getCTImagesByPage(id, pageIndex, pageSize, result -> {
+                HttpServerResponse response = ctx.response();
+                response.setChunked(true);
+                if (result != null) {
+                    /*int count = result.getInteger("count");
+                    JsonArray cts = new JsonArray();
+                    List<JsonObject> array = result.getJsonArray("ct").getList();
+                    for (JsonObject obj : array) {
+                        cts.add(obj);
+                    }*/
+                    response.end(result.encode());
+                }
+                else{
+                    response.setStatusCode(HttpCode.NULL_CONTENT.getCode()).end();
+                }
             });
         };
     }
