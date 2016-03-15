@@ -73,6 +73,11 @@ public class DataSet {
 		return this;
 	}
 
+	public DataSet load(String filePath) {
+		//TODO:
+		return null;
+	}
+
 	public Record getRecord(int index) {
 		return records.get(index);
 	}

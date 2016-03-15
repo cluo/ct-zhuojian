@@ -75,7 +75,7 @@ public class ReadDicoms {
 //        return list;
 //    }
 
-    public static Map<String, List<List<int[]>>> before() throws Exception {
+    private static Map<String, List<List<int[]>>> before() throws Exception {
 //        // 读取所有dicom数据，并转化成 128 * 128 大小的图片数据
 //        BufferedReader reader = new BufferedReader(new FileReader(new File("/dcm.conf")));
 //        String filePathDjj = reader.readLine();
@@ -88,34 +88,40 @@ public class ReadDicoms {
 
         // 将图片分成3组：正常、大结节、小结节；标签分别是：0/1/2
 
-        //求大结节、小结节的数量
-        //List 中的数组有2个元素，第一个是病灶的起始图片序号，第二个是病灶的结束图片序号
+        // 计算大结节切片数量
+        // List 中的数组有2个元素，
+        // 第一个是病灶的起始图片序号，
+        // 第二个是病灶的结束图片序号,
+        // 第三个是一个CT的切片数量
         List<int[]> cou = pre();
         int djjNum = 0;
         for (int i = 0; i < cou.get(0).length - 1; i +=2) {
             djjNum += cou.get(0)[i + 1] - cou.get(0)[i] + 1;
         }
         System.out.println("all djj NUM is " + djjNum);
+
+        //计算小结节切片数量
         int xjjNum = 0;
-        for (int i = 0; i < cou.get(1).length - 1; i +=2) {
+        for (int i = 0; i < cou.get(1).length; i +=2) {
             xjjNum += cou.get(1)[i + 1] - cou.get(1)[i] + 1;
         }
         System.out.println("all xjj NUM is " + xjjNum);
 
-//        //求正常图片的数量
-//        int djjNormNum = 0;
-//        for (int i = 0; i < cou.get(2).length - 1; i ++ ) {
-//            djjNormNum +=cou.get(2)[i];
-//        }
-//        djjNormNum = djjNormNum - djjNum;
-//        System.out.println("djj data have " + djjNormNum + "normal images.");
-//
-//        int xjjNormNum = 0;
-//        for (int i = 0; i < cou.get(3).length - 1; i ++) {
-//            xjjNormNum += cou.get(3)[i];
-//        }
-//        xjjNormNum = xjjNormNum - xjjNum;
-//        System.out.println("xjj data have " + xjjNormNum + "normal images");
+        // 计算大结节CT中正常切片的数量
+        int djjNormNum = 0;
+        for (int i = 0; i < cou.get(2).length; i ++ ) {
+            djjNormNum +=cou.get(2)[i];
+        }
+        djjNormNum = djjNormNum - djjNum;
+        System.out.println("the number of djj normal data: " + djjNormNum );
+
+        // 计算小结节CT中正常切片的数量
+        int xjjNormNum = 0;
+        for (int i = 0; i < cou.get(3).length - 1; i ++) {
+            xjjNormNum += cou.get(3)[i];
+        }
+        xjjNormNum = xjjNormNum - xjjNum;
+        System.out.println("the number of xjj normal data: " + xjjNormNum);
 
         // 数据：
         // 大结节 351 = 245 + 106
@@ -125,30 +131,69 @@ public class ReadDicoms {
         // 大结节和小结节的病灶图片 训练和测试进行映射
         int djjTrainNum = (int) (djjNum * 0.7);
         int xjjTrainNum = (int) (xjjNum * 0.7);
-        System.out.println("train djj data number is djj_number*0.7 " + djjTrainNum);
-        System.out.println("train xjj data number is xjj_number*0.7 " + xjjTrainNum);
+        System.out.println("train djj data number is djj_number*0.7: " + djjTrainNum);
+        System.out.println("train xjj data number is xjj_number*0.7: " + xjjTrainNum);
 
-        Map<Integer, int[]> djjMap = remap(cou.get(0));
-        List<List<int[]>> djjTrainAndTest = getShuffleData(djjMap, djjNum, djjTrainNum);
-        Map<Integer, int[]> xjjMap = remap(cou.get(1));
-        List<List<int[]>> xjjTrainAndTest = getShuffleData(xjjMap, xjjNum, xjjTrainNum);
+        // from 1 表示大结节的文件夹下的数据
+        // from 2 表示小结节的文件夹下的数据
+        Map<Integer, int[]> djjMap = remap(cou.get(0), 1);
+        // 对大结节数据打乱后，抽取训练和测试数据
+        List<List<int[]>> djjTrainAndTest = getShuffleData(djjMap, djjTrainNum);
+        Map<Integer, int[]> xjjMap = remap(cou.get(1), 2);
+        // 对小结节数据打乱后，抽取训练和测试数据
+        List<List<int[]>> xjjTrainAndTest = getShuffleData(xjjMap, xjjTrainNum);
 
         // 大结节和小结节的正常图片 进行映射
-        Map<Integer, int[]> djjNormMap = normRemap(cou.get(0), cou.get(2));
-        Map<Integer, int[]> xjjNormMap = normRemap(cou.get(1), cou.get(3));
-
-
-
-
-
-
-
+        // from 1 表示大结节的文件夹下的数据
+        // from 2 表示小结节的文件夹下的数据
+        Map<Integer, int[]> djjNormMap = normRemap(cou.get(0), cou.get(2), 1);
+        List<List<int[]>> djjNormTrainAndTest = getShuffleNormData(djjNormMap, 224, 93);
+        Map<Integer, int[]> xjjNormMap = normRemap(cou.get(1), cou.get(3), 2);
+        List<List<int[]>> xjjNormTrainAndTest = getShuffleNormData(xjjNormMap, 158, 66);
 
         Map<String, List<List<int[]>>> rst = new HashMap<>(8);
         rst.put("djj", djjTrainAndTest);
         rst.put("xjj", xjjTrainAndTest);
+        rst.put("djjNorm", djjNormTrainAndTest);
+        rst.put("xjjNorm", xjjNormTrainAndTest);
         return rst;
 
+    }
+
+    public static Map<String, List<int[]>> getTrainAndTest() throws Exception {
+        Map<String, List<List<int[]>>> bef = before();
+        List<List<int[]>> djjBz = bef.get("djj");
+        List<List<int[]>> xjjBz = bef.get("xjj");
+        List<List<int[]>> djjNorm = bef.get("djjNorm");
+        List<List<int[]>> xjjNorm = bef.get("xjjNorm");
+
+        List<int[]> train = new ArrayList<>();
+        System.out.println("djj train image number: " + djjBz.get(0).size());
+        train.addAll(djjBz.get(0));
+        System.out.println("xjj train image number: " + xjjBz.get(0).size());
+        train.addAll(xjjBz.get(0));
+        System.out.println("djj normal train image number: " + djjNorm.get(0).size());
+        train.addAll(djjNorm.get(0));
+        System.out.println("xjj normal train image number: " + xjjNorm.get(0).size());
+        train.addAll(xjjNorm.get(0));
+        System.out.println("shuffle train data.");
+        Collections.shuffle(train);
+
+
+        List<int[]> test = new ArrayList<>();
+        System.out.println("djj test image number: " + djjBz.get(1).size());
+        test.addAll(djjBz.get(1));
+        System.out.println("xjj test image number: " + xjjBz.get(1).size());
+        test.addAll(xjjBz.get(1));
+        System.out.println("djj normal test image number: " + djjNorm.get(1).size());
+        test.addAll(djjNorm.get(1));
+        System.out.println("djj normal image number: " + xjjNorm.get(1).size());
+        test.addAll(xjjNorm.get(1));
+
+        Map<String, List<int[]>> rst = new HashMap<>(2);
+        rst.put("train", train);
+        rst.put("test", test);
+        return rst;
     }
 
     private static List<int[]> pre() throws IOException {
@@ -178,7 +223,7 @@ public class ReadDicoms {
         reader.close();
 
         System.out.println("the number of djj: " + djjBzCoor.size() / 2);
-        System.out.println("the number of djj: " + xjjBzCoor.size() / 2);
+        System.out.println("the number of xjj: " + xjjBzCoor.size() / 2);
 
         int[] djjBzCo = new int[djjBzCoor.size()];
         for (int i = 0; i < djjBzCo.length; i ++) {
@@ -206,60 +251,95 @@ public class ReadDicoms {
         return rst;
     }
 
-    private static Map<Integer, int[]> remap(int[] bz) {
+    private static Map<Integer, int[]> remap(int[] bz, int from) {
         Map<Integer, int[]> map = new HashMap<>(bz.length / 2);
         int count = 0;
         for (int i = 0; i < bz.length; i += 2) {
-            for (int j =0; j < bz[i + 1] - bz[i + 0] + 1; j ++) {
-                int[] dat = new int[2];
-                dat[0] = i / 2;
+            for (int j =0; j < (bz[i + 1] - bz[i] + 1); j ++) {
+                int[] dat = new int[4];
+                dat[0] = i / 2 + 1;
                 dat[1] = bz[i] + j;
+                dat[2] = from;
+                dat[3] = from;  //0表示大结节，1表示小结节
                 map.put(count ++, dat);
             }
         }
         return map;
     }
 
-    private static Map<Integer, int[]> normRemap(int[] index, int[] maxNum) {
+    private static Map<Integer, int[]> normRemap(int[] index, int[] maxNum, int from) {
         if (index.length != maxNum.length * 2) {
             throw new IllegalArgumentException("length unmatched, please check your parameters.");
         }
         Map<Integer, int[]> map = new HashMap<>(4096);
         int count = 0;
         for (int i = 0; i < index.length; i +=2) {
-            for (int j = 0; j < maxNum[i]; j ++) {
+            for (int j = 0; j < maxNum[i / 2]; j ++) {
                 if (j > MIN_START_DCM && j < MAX_END_DCM) {
-                    if (j < index[0] || j > index[1]) {
-                        int[] dat = new int[2];
-                        map.put(count++, dat);
+                    if (j < index[i] || j > index[i + 1]) {
+                        int[] dat = new int[4];
+                        dat[0] = i / 2 + 1;     //属于第几张CT
+                        dat[1] = j;        //属于某张CT的第几个切片
+                        dat[2] = from;
+                        dat[3] = 3;     //表示正常图片
+                        map.put(count ++, dat);
                     }
+                } else {
+                    // 低于MIN_START_DCM 或者高于MAX_END_DCM的所有切片都删掉
                 }
             }
         }
-        return null;
+        return map;
     }
 
     /**
      *
      * @param map
-     * @param num1 all image number
      * @param num2 train image number
      * @return a list of two data, the first is the train and the second is the test, shuffle before return
      */
-    private static List<List<int[]>> getShuffleData(Map<Integer, int[]> map, int num1, int num2) {
-        List<Integer> shuffleNum = new ArrayList<>(num1);
-        for (int i = 0; i < num1; i ++) {
+    private static List<List<int[]>> getShuffleData(Map<Integer, int[]> map, int num2) {
+        List<Integer> shuffleNum = new ArrayList<>(map.size());
+        for (int i = 0; i < map.size(); i ++) {
             shuffleNum.add(i);
         }
         Collections.shuffle(shuffleNum);
 
         List<int[]> trainDataSuffix = new ArrayList<>(num2);
-        List<int[]> testDataSuffix = new ArrayList<>(num1 - num2);
+        List<int[]> testDataSuffix = new ArrayList<>(map.size() - num2);
         for (int i = 0; i < num2; i ++) {
             trainDataSuffix.add(map.get(shuffleNum.get(i)));
         }
-        for (int i = num2; i < num1; i ++) {
+        for (int i = num2; i < map.size(); i ++) {
             testDataSuffix.add(map.get(shuffleNum.get(i)));
+        }
+        List<List<int[]>> rst = new ArrayList<>(2);
+        rst.add(trainDataSuffix);
+        rst.add(testDataSuffix);
+        return rst;
+    }
+
+    /**
+     *
+     * @param map
+     * @param num1  number of train data
+     * @param num2  number of test data
+     * @return
+     */
+    private static List<List<int[]>> getShuffleNormData(Map<Integer, int[]> map, int num1, int num2) {
+        List<Integer> shuffleNum = new ArrayList<>(map.size());
+        for (int i = 0; i < map.size(); i ++) {
+            shuffleNum.add(i);
+        }
+        Collections.shuffle(shuffleNum);
+
+        List<int[]> trainDataSuffix = new ArrayList<>(num1);
+        List<int[]> testDataSuffix = new ArrayList<>(num2);
+        for (int i = 0; i < num1; i ++) {
+            trainDataSuffix.add(map.get(shuffleNum.get(i)));
+        }
+        for (int i = 0; i < num2; i ++) {
+            testDataSuffix.add(map.get(shuffleNum.get(i + num1)));
         }
         List<List<int[]>> rst = new ArrayList<>(2);
         rst.add(trainDataSuffix);
@@ -269,6 +349,6 @@ public class ReadDicoms {
 
     // test case
     public static void main(String[] args) throws Exception {
-        before();
+        getTrainAndTest();
     }
 }

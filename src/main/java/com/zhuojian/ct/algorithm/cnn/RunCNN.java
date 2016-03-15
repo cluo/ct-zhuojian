@@ -23,7 +23,7 @@ public class RunCNN {
 		String fileName = "E:\\dataset\\train";
 		DataSet dataSet = new DataSet();
 		dataSet.load(fileName, ",");
-		cnn.train(dataSet, 1);//
+		cnn.train(dataSet, 3);//
 
 		cnn.saveModel(modelName);
 		//CNN cnn = CNN.loadModel(modelName);

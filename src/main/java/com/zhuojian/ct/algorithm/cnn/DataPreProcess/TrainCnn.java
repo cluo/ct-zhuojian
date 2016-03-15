@@ -27,12 +27,14 @@ public class TrainCnn {
         CNN cnn = new CNN(builder, 20);
 
         try {
-            Map<String, List<List<int[]>>> preDat = ReadDicoms.before();
+            Map<String, List<int[]>> trainAndTest = ReadDicoms.getTrainAndTest();
+            List<int[]> train = trainAndTest.get("train");
+            List<int[]> test = trainAndTest.get("test");
+            cnn.train(train, 20, "/javaDcmData/feijiejie");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
         String fileName = "E:\\dataset\\train";
         DataSet dataSet = new DataSet();
         dataSet.load(fileName, ",");

@@ -74,4 +74,17 @@ public class DicomReaderImpl implements DicomReader {
         }
         return result;
     }
+
+    @Override
+    public double[] readTmp128DataInLine(File file, int[] x, int[] y) throws Exception {
+        int[][] tmp = readTmp128Data(file, x, y);
+        double[] rst = new double[128*128];
+        int c = 0;
+        for (int i = 0; i < tmp.length; i ++) {
+            for (int j = 0; j < tmp[i].length; j ++) {
+                rst[c ++] = tmp[i][j];
+            }
+        }
+        return rst;
+    }
 }
