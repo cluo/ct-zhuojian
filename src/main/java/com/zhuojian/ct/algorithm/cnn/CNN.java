@@ -1,5 +1,9 @@
 package com.zhuojian.ct.algorithm.cnn;
 
+import com.zhuojian.ct.algorithm.cnn.DataPreProcess.DcmConstant;
+import com.zhuojian.ct.dicom.DicomReader;
+import com.zhuojian.ct.dicom.DicomReaderImpl;
+
 import java.io.*;
 import java.util.Iterator;
 import java.util.List;
@@ -84,6 +88,51 @@ public class CNN implements Serializable {
 					Layer.prepareForNewRecord();
 				}
 
+				updateParas();
+				if (i % 50 == 0) {
+					System.out.print("..");
+					if (i + 50 > epochsNum)
+						System.out.println();
+				}
+			}
+			double p = 1.0 * right / count;
+			if (t % 10 == 1 && p > 0.96) {
+				ALPHA = 0.001 + ALPHA * 0.9;
+				Log.i("Set alpha = " + ALPHA);
+			}
+			Log.i("precision " + right + "/" + count + "=" + p);
+		}
+	}
+
+	// train dicom cnn
+	public void train(List<int[]> tra, int repeat, String path) {
+		new Lisenter().start();
+        DicomReader dicomReader = new DicomReaderImpl();
+		for (int t = 0; t < repeat && !stopTrain.get(); t++) {
+			int epochsNum = tra.size() / batchSize;
+			if (tra.size() % batchSize != 0)
+				epochsNum++;
+			Log.i("");
+			Log.i(t + "th iter epochsNum:" + epochsNum);
+			int right = 0;
+			int count = 0;
+			for (int i = 0; i < epochsNum; i++) {
+				int[] randPerm = Util.randomPerm(tra.size(), batchSize);
+				Layer.prepareForNewBatch();
+
+				for (int index : randPerm) {
+                    int[] ori = tra.get(index);
+                    try {
+                        Record record = getDcmRecord(ori, path, dicomReader);
+                        boolean isRight = train(record);
+                        if (isRight)
+                            right++;
+                        count++;
+                        Layer.prepareForNewRecord();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+				}
 				updateParas();
 				if (i % 50 == 0) {
 					System.out.print("..");
@@ -400,7 +449,6 @@ public class CNN implements Serializable {
 	}
 
 	private void forward(Record record) {
-		// ����������map
 		setInLayerOutput(record);
 		for (int l = 1; l < layers.size(); l++) {
 			Layer layer = layers.get(l);
@@ -596,4 +644,25 @@ public class CNN implements Serializable {
 		}
 		return null;
 	}
+
+    private static Record getDcmRecord(int[] ori, String path, DicomReader dicomReader) throws Exception {
+        int subDir = ori[0];
+        int suffix = ori[1];
+        int from = ori[2];
+        double label = ori[3];
+        File parent = new File(path + "/" + from + "/" + subDir);
+        String absPath = null;
+        for (File f : parent.listFiles()) {
+            if (f.getName().endsWith("." + suffix + ".dcm")) {
+                absPath = f.getAbsolutePath();
+                break;
+            }
+        }
+        if (absPath == null) {
+            throw new Exception("can not find this dicom files in " + path);
+        }
+        double[] dat = dicomReader.readTmp128DataInLine(new File(absPath), DcmConstant.XRESIZE, DcmConstant.YRESIZE);
+        Record record = new Record(dat, label);
+        return record;
+    }
 }

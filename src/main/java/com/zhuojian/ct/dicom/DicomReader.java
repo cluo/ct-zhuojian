@@ -10,4 +10,6 @@ public interface DicomReader {
     int[][] readDicomImageData(File file) throws IOException;
     int[][] readTmp384Data(File file, int[] x, int[] y) throws Exception;
     int[][] readTmp128Data(File file, int[] x, int[] y) throws Exception;
+
+    double[] readTmp128DataInLine(File file, int[] x, int[] y) throws Exception;
 }

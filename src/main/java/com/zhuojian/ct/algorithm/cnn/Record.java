@@ -5,14 +5,13 @@ package com.zhuojian.ct.algorithm.cnn;
 import java.util.Arrays;
 
 public class Record {
-    // �洢����
     private double[] attrs;
     private Double lable;
 
-//    public Record(double[] attrs, Double lable) {
-//        this.attrs = attrs;
-//        this.lable = lable;
-//    }
+    public Record(double[] attrs, Double lable) {
+        this.attrs = attrs;
+        this.lable = lable;
+    }
 
     public Record(double[] data) {
         lable = data[data.length - 1];
