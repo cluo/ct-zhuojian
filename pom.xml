@@ -170,6 +170,7 @@
                 </configuration>
             </plugin>
 
+            <!--mvn package appassembler:assemble-->
             <!--<plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>appassembler-maven-plugin</artifactId>
@@ -185,8 +186,8 @@
                 </executions>
 
                 <configuration>
-                    <configurationDirectory>conf</configurationDirectory>
-                    <configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
+                    <configurationDirectory>bin/conf</configurationDirectory>
+                    <configurationSourceDirectory>${basedir}/conf</configurationSourceDirectory>
                     <copyConfigurationDirectory>true</copyConfigurationDirectory>
                     <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
                     <assembleDirectory>${project.build.directory}/project</assembleDirectory>
