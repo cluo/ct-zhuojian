@@ -12,7 +12,7 @@ import java.util.Map;
 public class TrainCnn {
 
     public static void runCnn() {
-        String modelName = "/dataset/dcm_model.cnn";
+        String modelName = "/dataset/dcm_model_500.cnn";
 
         // 构建卷积神经网络
         LayerBuilder builder = new LayerBuilder();
@@ -30,15 +30,14 @@ public class TrainCnn {
             Map<String, List<int[]>> trainAndTest = ReadDicoms.getTrainAndTest();
             List<int[]> train = trainAndTest.get("train");
             List<int[]> test = trainAndTest.get("test");
-            cnn.train(train, 20, "/javaDcmData/feijiejie");
+            long mm1 = System.currentTimeMillis();
+            cnn.train(train, 500, "/javaDcmData/feijiejie");
+            long mm2 = System.currentTimeMillis();
+            System.out.println("500 epoch: " + ((mm2 - mm1) / 1000));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String fileName = "E:\\dataset\\train";
-        DataSet dataSet = new DataSet();
-        dataSet.load(fileName, ",");
-        cnn.train(dataSet, 1);//
 
         cnn.saveModel(modelName);
         //CNN cnn = CNN.loadModel(modelName);

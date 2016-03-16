@@ -136,19 +136,19 @@ public class ReadDicoms {
 
         // from 1 表示大结节的文件夹下的数据
         // from 2 表示小结节的文件夹下的数据
-        Map<Integer, int[]> djjMap = remap(cou.get(0), 1);
+        Map<Integer, int[]> djjMap = remap(cou.get(0), 0);
         // 对大结节数据打乱后，抽取训练和测试数据
         List<List<int[]>> djjTrainAndTest = getShuffleData(djjMap, djjTrainNum);
-        Map<Integer, int[]> xjjMap = remap(cou.get(1), 2);
+        Map<Integer, int[]> xjjMap = remap(cou.get(1), 1);
         // 对小结节数据打乱后，抽取训练和测试数据
         List<List<int[]>> xjjTrainAndTest = getShuffleData(xjjMap, xjjTrainNum);
 
         // 大结节和小结节的正常图片 进行映射
         // from 1 表示大结节的文件夹下的数据
         // from 2 表示小结节的文件夹下的数据
-        Map<Integer, int[]> djjNormMap = normRemap(cou.get(0), cou.get(2), 1);
+        Map<Integer, int[]> djjNormMap = normRemap(cou.get(0), cou.get(2), 0);
         List<List<int[]>> djjNormTrainAndTest = getShuffleNormData(djjNormMap, 224, 93);
-        Map<Integer, int[]> xjjNormMap = normRemap(cou.get(1), cou.get(3), 2);
+        Map<Integer, int[]> xjjNormMap = normRemap(cou.get(1), cou.get(3), 1);
         List<List<int[]>> xjjNormTrainAndTest = getShuffleNormData(xjjNormMap, 158, 66);
 
         Map<String, List<List<int[]>>> rst = new HashMap<>(8);
@@ -259,7 +259,7 @@ public class ReadDicoms {
                 int[] dat = new int[4];
                 dat[0] = i / 2 + 1;
                 dat[1] = bz[i] + j;
-                dat[2] = from;
+                dat[2] = from + 1;
                 dat[3] = from;  //0表示大结节，1表示小结节
                 map.put(count ++, dat);
             }
@@ -280,8 +280,8 @@ public class ReadDicoms {
                         int[] dat = new int[4];
                         dat[0] = i / 2 + 1;     //属于第几张CT
                         dat[1] = j;        //属于某张CT的第几个切片
-                        dat[2] = from;
-                        dat[3] = 3;     //表示正常图片
+                        dat[2] = from + 1;
+                        dat[3] = 2;     //表示正常图片
                         map.put(count ++, dat);
                     }
                 } else {

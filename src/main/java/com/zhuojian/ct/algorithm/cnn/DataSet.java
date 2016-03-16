@@ -51,7 +51,7 @@ public class DataSet {
 		File file = new File(filePath);
 		try {
 			BufferedReader ina = new BufferedReader(new FileReader(file + ".a"));
-			BufferedReader inb = inb = new BufferedReader(new FileReader(file + ".b"));
+			BufferedReader inb = new BufferedReader(new FileReader(file + ".b"));
 			String line;
 			while ((line = ina.readLine()) != null) {
 				String[] ches = line.split(tag);

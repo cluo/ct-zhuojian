@@ -200,38 +200,58 @@ public class CNN implements Serializable {
 
 
 	public void predict(DataSet testset, String fileName) {
-		Log.i("begin predict");
-		try {
-			int max = layers.get(layerNum - 1).getClassNum();
-			PrintWriter writer = new PrintWriter(new File(fileName));
-			Layer.prepareForNewBatch();
-			Iterator<Record> iter = testset.iter();
-			while (iter.hasNext()) {
-				Record record = iter.next();
-				forward(record);
-				Layer outputLayer = layers.get(layerNum - 1);
+        Log.i("begin predict");
+        try {
+            int max = layers.get(layerNum - 1).getClassNum();
+            PrintWriter writer = new PrintWriter(new File(fileName));
+            Layer.prepareForNewBatch();
+            Iterator<Record> iter = testset.iter();
+            while (iter.hasNext()) {
+                Record record = iter.next();
+                forward(record);
+                Layer outputLayer = layers.get(layerNum - 1);
 
-				int mapNum = outputLayer.getOutMapNum();
-				double[] out = new double[mapNum];
-				for (int m = 0; m < mapNum; m++) {
-					double[][] outmap = outputLayer.getMap(m);
-					out[m] = outmap[0][0];
-				}
-				// int lable =
-				// Util.binaryArray2int(out);
-				int lable = Util.getMaxIndex(out);
-				// if (lable >= max)
-				// lable = lable - (1 << (out.length -
-				// 1));
-				writer.write(lable + "\n");
-			}
-			writer.flush();
-			writer.close();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		Log.i("end predict");
-	}
+                int mapNum = outputLayer.getOutMapNum();
+                double[] out = new double[mapNum];
+                for (int m = 0; m < mapNum; m++) {
+                    double[][] outmap = outputLayer.getMap(m);
+                    out[m] = outmap[0][0];
+                }
+                // int lable =
+                // Util.binaryArray2int(out);
+                int lable = Util.getMaxIndex(out);
+                // if (lable >= max)
+                // lable = lable - (1 << (out.length -
+                // 1));
+                writer.write(lable + "\n");
+            }
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Log.i("end predict");
+    }
+
+    // predict by jql
+    public int predict(double[] data) {
+        Log.i("begin predict");
+        int label = -1;
+//        int max = layers.get(layerNum - 1).getClassNum();
+        Layer.prepareForNewBatch();
+        forward(new Record(data));
+        Layer outputLayer = layers.get(layerNum - 1);
+
+        int mapNum = outputLayer.getOutMapNum();
+        double[] out = new double[mapNum];
+        for (int m = 0; m < mapNum; m++) {
+            double[][] outmap = outputLayer.getMap(m);
+            out[m] = outmap[0][0];
+        }
+        label = Util.getMaxIndex(out);
+        Log.i("end predict");
+        return label;
+    }
 
 	private boolean isSame(double[] output, double[] target) {
 		boolean r = true;
