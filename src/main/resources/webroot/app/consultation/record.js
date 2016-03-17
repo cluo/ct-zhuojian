@@ -25,7 +25,7 @@ angular.module('record',['ui.router'])
             RecordService.getRecord(id)
                 .then(function(result){
                     $scope.type = result.data.type;
-                    $scope.file = result.data.file;
+                    $scope.file = 'upload/'+result.data.file;
                     $scope.diagnosis = result.data.diagnosis;
                 },function(error){
                     console.log(error);

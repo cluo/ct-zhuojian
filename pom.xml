@@ -185,6 +185,27 @@
                 </configuration>  
             </plugin> 
 
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1</version>
+                <configuration>
+                    <!--<includes>
+                        <include>${basedir}/src/main/resources/**</include>
+                        <include>${basedir}/src/main/scripts/**</include>
+                        <include>${basedir}/conf/config.json</include>
+                    </includes>-->
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!--mvn package appassembler:assemble-->
             <!--<plugin>
                 <groupId>org.codehaus.mojo</groupId>
