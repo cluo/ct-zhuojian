@@ -12,4 +12,8 @@ public class DcmConstant {
     public static final int[] XRESIZE = {XSTART, XEND};
     public static final int[] YRESIZE = {YSTART, YEND};
 
+    public static final int LARGER_NODULE = 0;
+    public static final int SMALL_NODULE = 1;
+    public static final int NORMAL_NODULE = 2;
+
 }

@@ -11,8 +11,15 @@ import java.util.Map;
  */
 public class TrainCnn {
 
+//    public static final String DCM_DIRECTORY = "E:\\javaDcmData\\dcm";
+//    public static final String DJJ_TXT = "/djj.txt";
+//    public static final String XJJ_TXT = "/xjj.txt";
+    public static final String DCM_DIRECTORY = "/home/jql/dcm";
+    public static final String DJJ_TXT = "/home/jql/conf/djj.txt";
+    public static final String XJJ_TXT = "/home/jql/conf/xjj.txt";
+
     public static void runCnn() {
-        String modelName = "/dataset/dcm_model.cnn";
+        String modelName = "/home/jql/dcm_model_2000.cnn";
 
         // 构建卷积神经网络
         LayerBuilder builder = new LayerBuilder();
@@ -24,34 +31,35 @@ public class TrainCnn {
         builder.addLayer(Layer.buildConvLayer(5, new Layer.Size(3, 3)));
         builder.addLayer(Layer.buildSampLayer(new Layer.Size(2, 2)));
         builder.addLayer(Layer.buildOutputLayer(3));
-        CNN cnn = new CNN(builder, 20);
+        CNN cnn = new CNN(builder, 80);
 
         try {
             Map<String, List<int[]>> trainAndTest = ReadDicoms.getTrainAndTest();
             List<int[]> train = trainAndTest.get("train");
             List<int[]> test = trainAndTest.get("test");
-            cnn.train(train, 20, "/javaDcmData/feijiejie");
+            long mm1 = System.currentTimeMillis();
+			int epoch = 2000;
+            cnn.train(train, epoch, DCM_DIRECTORY);
+            long mm2 = System.currentTimeMillis();
+            System.out.println(epoch + " epoch: " + ((mm2 - mm1) / 1000));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String fileName = "E:\\dataset\\train";
-        DataSet dataSet = new DataSet();
-        dataSet.load(fileName, ",");
-        cnn.train(dataSet, 1);//
 
         cnn.saveModel(modelName);
-        //CNN cnn = CNN.loadModel(modelName);
+        System.out.println("model is save in " + modelName);
+//        CNN cnn = CNN.loadModel(modelName);
 
-        DataSet testSet = new DataSet();
-        testSet.load("E:\\dataset\\test", ",");
-        cnn.predict(testSet, "E:\\dataset\\result");
-        System.out.println("\n\n\n\n\n\n");
-        try {
-            System.out.println(new CalculatePrecision().getPrecision("E:\\dataset\\result", "E:\\dataset\\test.predict"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        DataSet testSet = new DataSet();
+//        testSet.load("E:\\dataset\\test", ",");
+//        cnn.predict(testSet, "E:\\dataset\\result");
+//        System.out.println("\n\n\n\n\n\n");
+//        try {
+//            System.out.println(new CalculatePrecision().getPrecision("E:\\dataset\\result", "E:\\dataset\\test.predict"));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static void main(String[] args) {

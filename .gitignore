@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # eclipse ignore
 .settings/
 .project
@@ -71,9 +72,11 @@ Temporary Items
 .vertx/
 file-uploads/
 logs/
-.idea/compiler.xml
-.idea/dataSources.ids
-.idea/dataSources.local.xml
-.idea/dataSources.xml
-.idea/encodings.xml
-.idea/workspace.xml
+
+.gitignore
+.idea/*
+.vertx
+out
+target
+*.iml
+logs
