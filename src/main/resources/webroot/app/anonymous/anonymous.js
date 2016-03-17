@@ -10,8 +10,16 @@ angular.module('anonymous',['ui.router'])
             url: '/anonymous',
             templateUrl: 'app/anonymous/anonymous.html',
             controller: 'AnonymousCtrl'
+        })
+        .state('pixelate', {
+            url: '/pixelate',
+            templateUrl: 'app/anonymous/pixelate.html',
+            controller: 'PixelateCtrl'
         });
     })
     .controller('AnonymousCtrl', function($scope){
+
+    })
+    .controller('PixelateCtrl', function($scope){
 
     });

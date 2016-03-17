@@ -74,7 +74,7 @@ angular.module('ct.area', ['ui.router'])
 
         $scope.addFeatureResult = '';
 
-        $scope.myImage=$stateParams.file;
+        $scope.myImage='upload/'+$stateParams.file;
         $scope.myCroppedImage='';
 
         $scope.result = '';
