@@ -200,7 +200,7 @@ public class ReadDicoms {
         BufferedReader reader;
         String line;
 
-        reader = new BufferedReader(new FileReader(new File("/djj.txt")));
+        reader = new BufferedReader(new FileReader(new File(TrainCnn.DJJ_TXT)));
         List<String> djjBzCoor = new ArrayList<>();
         List<String> djjNum = new ArrayList<>();
         while ((line = reader.readLine()) != null) {
@@ -211,7 +211,7 @@ public class ReadDicoms {
         }
         reader.close();
 
-        reader = new BufferedReader(new FileReader(new File("/xjj.txt")));
+        reader = new BufferedReader(new FileReader(new File(TrainCnn.XJJ_TXT)));
         List<String> xjjBzCoor = new ArrayList<>();
         List<String> xjjNum = new ArrayList<>();
         while ((line = reader.readLine()) != null) {

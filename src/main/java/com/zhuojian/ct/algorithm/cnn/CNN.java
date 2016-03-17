@@ -5,8 +5,7 @@ import com.zhuojian.ct.dicom.DicomReader;
 import com.zhuojian.ct.dicom.DicomReaderImpl;
 
 import java.io.*;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CNN implements Serializable {
@@ -107,7 +106,14 @@ public class CNN implements Serializable {
 	// train dicom cnn
 	public void train(List<int[]> tra, int repeat, String path) {
 		new Lisenter().start();
-        DicomReader dicomReader = new DicomReaderImpl();
+		Map<String, double[]> dataMap = null;
+		try {
+			dataMap = dcms(path);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (dataMap == null)
+			throw new RuntimeException("data map error.");
 		for (int t = 0; t < repeat && !stopTrain.get(); t++) {
 			int epochsNum = tra.size() / batchSize;
 			if (tra.size() % batchSize != 0)
@@ -123,7 +129,17 @@ public class CNN implements Serializable {
 				for (int index : randPerm) {
                     int[] ori = tra.get(index);
                     try {
-                        Record record = getDcmRecord(ori, path, dicomReader);
+						int subDir = ori[0];
+						int suffix = ori[1];
+						int from = ori[2];
+						double label = ori[3];
+						String newPath = path + "/" + from + "/" + subDir + "/" + suffix;
+//						String newPath = path + "\\" + from + "\\" + subDir + "/" + suffix;
+						double[] data = dataMap.get(newPath);
+						if (data == null || data.length != 128*128)
+							throw new RuntimeException("data length is not 128*128.");
+                        //Record record = getDcmRecord(ori, path, dicomReader);
+						Record record = new Record(data, label);
                         boolean isRight = train(record);
                         if (isRight)
                             right++;
@@ -685,4 +701,29 @@ public class CNN implements Serializable {
         Record record = new Record(dat, label);
         return record;
     }
+
+	public Map<String, double[]> dcms(String path) throws Exception {
+		DicomReader reader = new DicomReaderImpl();
+		Map<String, double[]> dataMap = new HashMap<>(1024);
+		File parent = new File(path);
+//		int count = 0;
+		for (File f : parent.listFiles()) {
+			String secondPath = f.getAbsolutePath();
+			for (File dcmDir : f.listFiles()) {
+				String thridPath = dcmDir.getAbsolutePath();
+//				count = count + dcmDir.listFiles().length;
+//				System.out.println("###@@@" + dcmDir.listFiles().length);
+				for (File dcm : dcmDir.listFiles()) {
+					String fileName = dcm.getName();
+					double[] dat = reader.readTmp128DataInLine(new File(dcm.getAbsolutePath()), DcmConstant.XRESIZE, DcmConstant.YRESIZE);
+					String[] req = fileName.split("\\.");
+//					System.out.println(thridPath + "/" + req[req.length - 2]);
+					dataMap.put(thridPath + "/" + req[req.length - 2], new double[]{0.6});
+				}
+			}
+		}
+//		System.out.println("sigma:@@@###" + dataMap.size());
+		return dataMap;
+	}
+
 }
