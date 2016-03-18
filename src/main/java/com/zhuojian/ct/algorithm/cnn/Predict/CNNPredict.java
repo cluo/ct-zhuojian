@@ -47,7 +47,7 @@ public class CNNPredict {
             throw new Exception("file Service 服务执行失败。");
 
         // shell 调用 matlab 执行任务
-        double[] result = JavaShellUtil.execShellAndMatlab();
+        double[] result = JavaShellUtil.execShellAndMatlab(outFileName);
         double large = result[0];
         double small = result[1];
         double normal = result[2];
@@ -91,7 +91,11 @@ public class CNNPredict {
     private boolean deleteFile(String delName) {
         File file = new File(delName);
         if (file.exists() && file.isFile()) {
-            return file.delete();
+            File resultFile = new File(delName + ".rst");
+            if (resultFile.exists() && resultFile.isFile())
+                return  resultFile.delete() && file.delete();
+            else
+                return file.delete();
         }
         return false;
     }
@@ -99,15 +103,7 @@ public class CNNPredict {
 
     public static void main(String[] args) throws Exception {
         CNNPredict pre = new CNNPredict(null);
-        String fileName = pre.fileService("1f8c8d48-12d7-42c8-ad2b-75f83c86b23a");
-        pre.deleteFile(fileName);
-        BufferedReader reader = new BufferedReader(new FileReader(new File(DcmDir + "lung.rst")));
-        String[] resultString = reader.readLine().trim().split("@#@#@");
-        double[] result = new double[resultString.length];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = Double.parseDouble(resultString[i]);
-        }
-        reader.close();
+       pre.getPred("7dd88ac4-67d5-40ae-93b1-ee552f7baf58");
 
         /**
 
