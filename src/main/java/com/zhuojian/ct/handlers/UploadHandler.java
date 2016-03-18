@@ -80,7 +80,7 @@ public class UploadHandler {
             List<CTImage> ctImages = new ArrayList<>(files.size());
             for (FileUpload file : files) {
                 String path = file.uploadedFileName();
-                String img = path.substring(path.indexOf(AppUtil.configStr("upload.path")));
+                String img = path.substring(path.lastIndexOf(AppUtil.configStr("upload.path"))+1);
                 CTImage ctImage = new CTImage();
                 ctImage.setType(type == 1 ? "肝脏" : "肺部");
                 ctImage.setFile(img);
