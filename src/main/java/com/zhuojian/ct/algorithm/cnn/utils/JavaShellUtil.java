@@ -17,7 +17,7 @@ public class JavaShellUtil {
     private static final String separator = "@@@###@@@";
 
     private static final String shellPath = "/home/jql/test.sh";
-    private static final String resultFile = "/home/jql/lung.rst";
+    private static final String resultFile = "/home/jql/dicom/DcmDir/lung.rst";
 
     // 获取交互文件夹下的文件进行预测，并将结果从文件中读入，并解析成double类型的数组
     public static double[] execShellAndMatlab() throws Exception {
