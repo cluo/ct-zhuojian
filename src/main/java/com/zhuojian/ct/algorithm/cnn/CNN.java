@@ -136,8 +136,10 @@ public class CNN implements Serializable {
 						String newPath = path + "/" + from + "/" + subDir + "/" + suffix;
 //						String newPath = path + "\\" + from + "\\" + subDir + "/" + suffix;
 						double[] data = dataMap.get(newPath);
-						if (data == null || data.length != 128*128)
+						if (data == null || data.length != 128*128) {
+							System.out.println(data.length);
 							throw new RuntimeException("data length is not 128*128.");
+						}
                         //Record record = getDcmRecord(ori, path, dicomReader);
 						Record record = new Record(data, label);
                         boolean isRight = train(record);
@@ -718,11 +720,11 @@ public class CNN implements Serializable {
 					double[] dat = reader.readTmp128DataInLine(new File(dcm.getAbsolutePath()), DcmConstant.XRESIZE, DcmConstant.YRESIZE);
 					String[] req = fileName.split("\\.");
 //					System.out.println(thridPath + "/" + req[req.length - 2]);
-					dataMap.put(thridPath + "/" + req[req.length - 2], new double[]{0.6});
+					dataMap.put(thridPath + "/" + req[req.length - 2], dat);
 				}
 			}
 		}
-//		System.out.println("sigma:@@@###" + dataMap.size());
+		System.out.println("sigma:@@@###" + dataMap.size());
 		return dataMap;
 	}
 
