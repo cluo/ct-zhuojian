@@ -1,3 +1,74 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        CT图像多文件上传上传
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <form class="form-horizontal" name="form">
+        <fieldset>
+            <div class="control-group">
+
+                <!-- Select Basic -->
+                <label class="control-label">CT图片类型</label>
+                <div class="controls">
+                    <select class="input-xlarge" ng-model="type">
+                        <option value="1">肝脏</option>
+                        <option value="2">肺部</option></select>
+                </div>
+
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">CT文件路径</label>
+
+                <!-- File Upload -->
+                <div class="controls">
+                    <input class="input-file" ngf-select ng-model="files" ngf-multiple="true" name="files" type="file">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" name="id">会诊号</label>
+                <div class="controls">
+                    <input type="text" placeholder="会诊号" class="input-xlarge" ng-model="id">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">上传进度</label>
+
+                <div class="controls">
+                    <div class="progress progress-striped active">
+                        <div class="bar" ng-style="bar">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="control-group">
+                <label class="control-label"></label>
+
+                <!-- Button -->
+                <div class="controls">
+                    <button class="btn btn-success" type="submit" ng-click="submit()">上传</button>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label"></label>
+
+                <!-- Button -->
+                <div class="controls" ng-bind="result">
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+</section>
+<!-- /.content -->
+<!--
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12 text-center">
@@ -8,7 +79,7 @@
                     </div>
                     <div class="control-group">
 
-                        <!-- Select Basic -->
+                        &lt;!&ndash; Select Basic &ndash;&gt;
                         <label class="control-label">CT图片类型</label>
                         <div class="controls">
                             <select class="input-xlarge" ng-model="type">
@@ -21,7 +92,7 @@
                     <div class="control-group">
                         <label class="control-label">CT文件路径</label>
 
-                        <!-- File Upload -->
+                        &lt;!&ndash; File Upload &ndash;&gt;
                         <div class="controls">
                             <input class="input-file" ngf-select ng-model="files" ngf-multiple="true" name="files" type="file">
                         </div>
@@ -48,7 +119,7 @@
                     <div class="control-group">
                         <label class="control-label"></label>
 
-                        <!-- Button -->
+                        &lt;!&ndash; Button &ndash;&gt;
                         <div class="controls">
                             <button class="btn btn-success" type="submit" ng-click="submit()">上传</button>
                         </div>
@@ -56,7 +127,7 @@
                     <div class="control-group">
                         <label class="control-label"></label>
 
-                        <!-- Button -->
+                        &lt;!&ndash; Button &ndash;&gt;
                         <div class="controls" ng-bind="result">
                         </div>
                     </div>
@@ -65,4 +136,4 @@
             </form>
         </div>
     </div>
-</div>
+</div>-->

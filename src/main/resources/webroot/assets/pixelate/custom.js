@@ -92,7 +92,8 @@
 
         var selectorCanvas = Main.mainPixelate._$selectorCanvas;
 
-        selectorCanvas.parents('.pixelate-wrap').height($(window).height());
+        /*selectorCanvas.parents('.pixelate-wrap').height($(window).height());*/
+        selectorCanvas.parents('.pixelate-wrap').height(selectorCanvas.height());
         selectorCanvas.parents('.pixelate-parent').height(selectorCanvas.height());
         selectorCanvas.parents('.pixelate-wrap').width(selectorCanvas.width());
 
@@ -107,16 +108,8 @@
         } catch (e) {
 
         }
-        $('#save').click(function() {
-          if (isFileSaverSupported) {
-            Main.mainPixelate.currentCanvas.toBlob(function(blob) {
-                saveAs(blob, "pixelated-image.png");
-            });
-          }
-          return false;
-        });
-        //upload
-        $('#uploadAnonymous').click(function(){
+        //保存匿名化后的图片到数据库
+        $('#save').click(function(){
           var string=Main.mainPixelate.currentCanvas.toDataURL();
           $.ajax({
             url:"image/uploadAnonymous",
@@ -149,9 +142,8 @@
           '</div>' +
           '<div class="form-group">' +
             '<div class="col-sm-offset-3 col-sm-9">' +
-              '<a id="apply" class="btn btn-primary" href="#">Apply</a>&nbsp;' +
-              '<a id="save" class="btn btn-default" href="#">Download</a>&nbsp;' +
-              '<a id="uploadAnonymous" class="btn btn-default" href="#">Upload</a>' +
+              '<a id="apply" class="btn btn-primary" href="#">保存</a>&nbsp;' +
+              '<a id="save" class="btn btn-default" href="#">存储</a>' +
             '</div>' +
           '</div>' +
           '</form>' +
@@ -178,8 +170,8 @@
         img.src = imgSrc;
         Main.imgSrc = imgSrc;
       },
-      usagePixelate: function() {
-        Main.createImage('../../app/anonymous/report.jpg');
+      usagePixelate: function(image) {
+        Main.createImage(image);
       },
       apiSelect: function(x, y, width, height) {
         if (!Main.mainPixelate) return;
@@ -222,7 +214,7 @@
       }
     };
     Main.init();
-    Main.usagePixelate();
+    Main.usagePixelate('../../app/anonymous/report.jpg');
     window.Main = Main;
   });
 })(jQuery, pixelate);

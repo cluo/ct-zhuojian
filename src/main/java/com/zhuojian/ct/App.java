@@ -8,6 +8,9 @@ import io.vertx.ext.dropwizard.DropwizardMetricsOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.net.URI;
+
 /**
  * Created by wuhaitao on 2016/2/25.
  */
@@ -22,7 +25,7 @@ public class App {
         options.setMaxEventLoopExecuteTime(Long.MAX_VALUE);
         Vertx vertx = Vertx.vertx(options);
         vertx.deployVerticle(WebServer.class.getName());
-        vertx.deployVerticle(LesionRecognitionServer.class.getName());
+        /*vertx.deployVerticle(LesionRecognitionServer.class.getName());*/
 
         /** 添加钩子函数,保证vertx的正常关闭 */
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
