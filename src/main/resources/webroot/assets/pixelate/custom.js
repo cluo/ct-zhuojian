@@ -110,14 +110,8 @@
         }
         //保存匿名化后的图片到数据库
         $('#save').click(function(){
-          var string=Main.mainPixelate.currentCanvas.toDataURL();
-          $.ajax({
-            url:"image/uploadAnonymous",
-            type:"POST",
-            data:{"image":string},
-            success:function(){}
-          });
-          return false;
+          var image=Main.mainPixelate.currentCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+          window.location.href=image;
         });
         $('#apply').click(function() {
           if (Main.mainPixelate.isMasked()) {
@@ -143,7 +137,7 @@
           '<div class="form-group">' +
             '<div class="col-sm-offset-3 col-sm-9">' +
               '<a id="apply" class="btn btn-primary" href="#">保存</a>&nbsp;' +
-              '<a id="save" class="btn btn-default" href="#">存储</a>' +
+              '<a id="save" class="btn btn-default" href="#">下载</a>' +
             '</div>' +
           '</div>' +
           '</form>' +
@@ -214,7 +208,7 @@
       }
     };
     Main.init();
-    Main.usagePixelate('../../app/anonymous/report.jpg');
+    /*Main.usagePixelate('../../app/anonymous/report.jpg');*/
     window.Main = Main;
   });
 })(jQuery, pixelate);

@@ -46,7 +46,7 @@ public class UploadHandler {
             Set<FileUpload> files = ctx.fileUploads();
             for (FileUpload file : files) {
                 String path = file.uploadedFileName();
-                String img = path.substring(path.indexOf(AppUtil.configStr("upload.path")));
+                String img = path.substring(path.indexOf(AppUtil.configStr("upload.path"))+7);
                 CTImage ctImage = new CTImage();
                 ctImage.setType(type == 1 ? "肝脏" : "肺部");
                 ctImage.setFile(img);
@@ -55,8 +55,7 @@ public class UploadHandler {
                 LOGGER.info("upload path : {}", path);
                 ctImageDao.addCTImage(ctImage, responseMsg -> {
                     if (responseMsg.getCode().getCode() == HttpCode.OK.getCode()) {
-                        String filename = path.substring(path.lastIndexOf("\\") + 1);
-                        ctx.response().end(new JsonObject().put("filename", filename).encode());
+                        ctx.response().end(new JsonObject().put("filename", img).encode());
                     } else {
                         ctx.response().setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getMsg());
                     }
@@ -80,7 +79,7 @@ public class UploadHandler {
             List<CTImage> ctImages = new ArrayList<>(files.size());
             for (FileUpload file : files) {
                 String path = file.uploadedFileName();
-                String img = path.substring(path.lastIndexOf(AppUtil.configStr("upload.path"))+1);
+                String img = path.substring(path.indexOf(AppUtil.configStr("upload.path"))+7);
                 CTImage ctImage = new CTImage();
                 ctImage.setType(type == 1 ? "肝脏" : "肺部");
                 ctImage.setFile(img);

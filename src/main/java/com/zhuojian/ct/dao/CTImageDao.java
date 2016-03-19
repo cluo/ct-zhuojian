@@ -90,7 +90,7 @@ public class CTImageDao {
                         List<JsonObject> objs = result.result().getRows();
                         if (objs != null && !objs.isEmpty()) {
                             for (JsonObject obj : objs) {
-                                String image = obj.getString("file");
+                                String image = AppUtil.getUploadDir()+File.separator+obj.getString("file");
                                 File file = new File(image);
                                 if (file.exists()){
                                     file.delete();

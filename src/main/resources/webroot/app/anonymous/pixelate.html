@@ -7,9 +7,24 @@
 
 <!-- Main content -->
 <section class="content">
-    <div class="col-sm-16 upload-side">
-        <div id="upload-images"></div>
+    <div id="container" class="container">
+        <div class="row-fluid">
+            <div class="row">
+                <div class="col-xs-10">
+                    <!--action="http://demo.pixelate.terapp.com/demo/#" method="post"-->
+                    <form id="upload-form" role="form" action="http://demo.pixelate.terapp.com/demo/#" method="post" class="dropzone dz-clickable">
+                        <div class="dz-default dz-message">
+                            <span>上传文件</span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-6 upload-side">
+                <div id="upload-images"></div>
+            </div>
+        </div>
     </div>
+    <input type="file" multiple="multiple" class="dz-hidden-input" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
 </section>
 <!-- /.content -->
 <!--<div class="container-fluid">
