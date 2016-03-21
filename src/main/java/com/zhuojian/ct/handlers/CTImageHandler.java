@@ -61,7 +61,7 @@ public class CTImageHandler {
             ctImageDao.deleteCTImageById(id, result -> {
                 HttpServerResponse response = ctx.response();
                 response.setChunked(true);
-                response.setStatusCode(result.getCode().getCode()).end(result.getMsg());
+                response.setStatusCode(result.getCode().getCode()).end(result.getContent());
             });
         };
     }
@@ -98,7 +98,7 @@ public class CTImageHandler {
             ctImageDao.updateCTImage(ctImage, responseMsg -> {
                 HttpServerResponse response = ctx.response();
                 response.setChunked(true);
-                response.setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getMsg());
+                response.setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getContent());
             });
         };
     }

@@ -1,7 +1,7 @@
 /**
  * Created by wuhaitao on 2016/3/10.
  */
-angular.module('record',['ui.router'])
+angular.module('record',['ui.router', 'auth'])
     .config(function($stateProvider){
         $stateProvider.state('record', {
             url: '/record/:id',

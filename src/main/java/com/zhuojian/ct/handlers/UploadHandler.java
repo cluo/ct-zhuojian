@@ -57,7 +57,7 @@ public class UploadHandler {
                     if (responseMsg.getCode().getCode() == HttpCode.OK.getCode()) {
                         ctx.response().end(new JsonObject().put("filename", img).encode());
                     } else {
-                        ctx.response().setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getMsg());
+                        ctx.response().setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getContent());
                     }
                 });
                 break;
@@ -89,7 +89,7 @@ public class UploadHandler {
                 ctImages.add(ctImage);
             }
             ctImageDao.addCTImages(ctImages, responseMsg -> {
-                ctx.response().setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getMsg());
+                ctx.response().setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getContent());
             });
         };
     }

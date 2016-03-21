@@ -17,61 +17,40 @@
 
 <!-- Main content -->
 <section class="content">
-    <table class="table">
-        <thead>
-        <tr>
-            <th>编号</th>
-            <th>CT类型</th>
-            <th>CT诊断</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="ctImage in ctImages">
-            <td>{{ctImage.id}}</td>
-            <td>{{ctImage.type}}</td>
-            <td class="datahide">{{ctImage.diagnosis}}</td>
-            <td>
-                <a class="btn btn-success" href="#/record/{{ctImage.id}}">病历</a>
-                <a class="btn btn-info" ng-click="goCAD(ctImage)">辅助诊断</a>
-                <a class="btn btn-danger" ng-click="deleteCT(ctImage.id)">删除</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <tm-pagination conf="paginationConf"></tm-pagination>
-</section>
-<!-- /.content -->
-<!--
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span12">
-            <h3 class="text-center">
-                CT图像
-            </h3>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>编号</th>
-                    <th>CT类型</th>
-                    <th>CT诊断</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="ctImage in ctImages">
-                    <td>{{ctImage.id}}</td>
-                    <td>{{ctImage.type}}</td>
-                    <td class="datahide">{{ctImage.diagnosis}}</td>
-                    <td>
-                        <a class="btn btn-success" href="#/record/{{ctImage.id}}">病历</a>
-                        <a class="btn btn-info" ng-click="goCAD(ctImage)">辅助诊断</a>
-                        <a class="btn btn-danger" ng-click="deleteCT(ctImage.id)">删除</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <tm-pagination conf="paginationConf"></tm-pagination>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">CT图像列表</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>CT类型</th>
+                            <th>CT诊断</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="ctImage in ctImages">
+                            <td>{{ctImage.id}}</td>
+                            <td>{{ctImage.type}}</td>
+                            <td class="datahide">{{ctImage.diagnosis}}</td>
+                            <td>
+                                <a class="btn btn-success" href="#/record/{{ctImage.id}}">病历</a>
+                                <a ng-if="main.isPermitted('cad')" class="btn btn-info" ng-click="goCAD(ctImage)">辅助诊断</a>
+                                <a ng-if="main.isPermitted('delete_ct')" class="btn btn-danger" ng-click="deleteCT(ctImage.id)">删除</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <tm-pagination conf="paginationConf"></tm-pagination>
+                </div>
+            </div>
         </div>
     </div>
-</div>-->
+</section>
+<!-- /.content -->

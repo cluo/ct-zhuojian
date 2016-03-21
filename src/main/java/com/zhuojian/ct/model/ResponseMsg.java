@@ -3,18 +3,18 @@ package com.zhuojian.ct.model;
 /**
  * Created by wuhaitao on 2016/3/9.
  */
-public class ResponseMsg {
+public class ResponseMsg<T> {
 
-    private String msg;
+    private T content;
     private HttpCode code;
 
-    public ResponseMsg(String msg) {
-        this.msg = msg;
+    public ResponseMsg(T content) {
+        this(HttpCode.OK, content);
     }
-    public ResponseMsg(HttpCode code, String msg) {
+    public ResponseMsg(HttpCode code, T content) {
         super();
         this.code = code;
-        this.msg = msg;
+        this.content = content;
     }
     public HttpCode getCode() {
         return code;
@@ -22,10 +22,12 @@ public class ResponseMsg {
     public void setCode(HttpCode code) {
         this.code = code;
     }
-    public String getMsg() {
-        return msg;
+
+    public T getContent() {
+        return content;
     }
-    public void setMsg(String msg) {
-        this.msg = msg;
+
+    public void setContent(T content) {
+        this.content = content;
     }
 }

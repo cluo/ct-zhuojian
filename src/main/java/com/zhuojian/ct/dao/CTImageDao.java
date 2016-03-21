@@ -77,7 +77,7 @@ public class CTImageDao {
         });
     }
 
-    public void deleteCTImageById(int id, Handler<ResponseMsg> responseMsgHandler){
+    public void deleteCTImageById(int id, Handler<ResponseMsg<String>> responseMsgHandler){
         sqlite.getConnection(connection -> {
             if (connection.failed()){
                 LOGGER.error("connection sqlite failed!");
@@ -161,7 +161,7 @@ public class CTImageDao {
         });
     }
 
-    public void addCTImage(CTImage ctImage, Handler<ResponseMsg> responseMsgHandler){
+    public void addCTImage(CTImage ctImage, Handler<ResponseMsg<String>> responseMsgHandler){
         sqlite.getConnection(connection -> {
             if (connection.failed()){
                /*System.out.println("connection sqlite failed!");*/
@@ -185,7 +185,7 @@ public class CTImageDao {
         });
     }
 
-    public void addCTImages(List<CTImage> ctImages, Handler<ResponseMsg> responseMsgHandler){
+    public void addCTImages(List<CTImage> ctImages, Handler<ResponseMsg<String>> responseMsgHandler){
         sqlite.getConnection(connection -> {
             if (connection.failed()){
                 LOGGER.error("connection sqlite failed!");
@@ -213,7 +213,7 @@ public class CTImageDao {
         });
     }
 
-    public void updateCTImage(CTImage ctImage, Handler<ResponseMsg> responseMsgHandler){
+    public void updateCTImage(CTImage ctImage, Handler<ResponseMsg<String>> responseMsgHandler){
         sqlite.getConnection(connection -> {
             if (connection.failed()){
                /*System.out.println("connection sqlite failed!");*/
