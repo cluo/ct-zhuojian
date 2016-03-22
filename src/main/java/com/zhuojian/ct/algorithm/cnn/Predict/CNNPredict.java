@@ -24,10 +24,6 @@ public class CNNPredict {
         }
     }
 
-    public CNNPredict(Vertx vertx) throws UnsupportedEncodingException {
-        //ctImageDao = new CTImageDao(vertx);
-    }
-
     private DicomReader reader = new DicomReaderImpl();
     private CNN cnn = CNN.loadModel("model");
 
@@ -102,7 +98,7 @@ public class CNNPredict {
 
 
     public static void main(String[] args) throws Exception {
-        CNNPredict pre = new CNNPredict(null);
+        CNNPredict pre = new CNNPredict();
        pre.getPred("7dd88ac4-67d5-40ae-93b1-ee552f7baf58");
 
         /**
