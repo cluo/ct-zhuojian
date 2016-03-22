@@ -1,7 +1,7 @@
 /**
  * Created by wuhaitao on 2016/3/8.
  */
-angular.module('upload', ['ui.router','ngFileUpload'])
+angular.module('upload', ['ui.router','ngFileUpload', 'auth'])
     .config(function ($stateProvider) {
         $stateProvider
             .state('upload', {

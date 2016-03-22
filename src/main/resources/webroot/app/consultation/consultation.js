@@ -1,7 +1,8 @@
 /**
  * Created by wuhaitao on 2016/3/9.
  */
-angular.module('consultation',['ui.router', 'record', 'ct.area', 'tm.pagination', 'lung'])
+
+angular.module('consultation',['ui.router', 'record', 'ct.area', 'tm.pagination', 'auth', 'lung'])
     .config(function($stateProvider, $urlRouterProvider){
         $stateProvider.state('consultation', {
             url: '/consultation',
@@ -43,8 +44,6 @@ angular.module('consultation',['ui.router', 'record', 'ct.area', 'tm.pagination'
                 .then(function(result){
                     $scope.consultations = result.data.consultations;
                     $scope.paginationConf.totalItems = result.data.count;
-                    console.log($scope.consultations);
-                    console.log($scope.paginationConf.totalItems);
                 },function(error){
                     console.log(error);
                 });

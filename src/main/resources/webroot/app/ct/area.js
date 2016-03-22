@@ -1,7 +1,7 @@
 /**
  * Created by wuhaitao on 2016/2/26.
  */
-angular.module('ct.area', ['ui.router'])
+angular.module('ct.area', ['ui.router', 'auth'])
     .config(function ($stateProvider) {
         $stateProvider.state('area', {
             url: '/area/:image',

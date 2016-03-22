@@ -80,10 +80,10 @@ public class ConsultationHandler {
             String updated = data.getString("updated");
             consultationDao.addConsultation(new Consultation(id,created,record,updated), responseMsg -> {
                 if (responseMsg.getCode().getCode() == HttpCode.OK.getCode()){
-                    ctx.response().end(responseMsg.getMsg());
+                    ctx.response().end(responseMsg.getContent());
                 }
                 else{
-                    ctx.response().setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getMsg());
+                    ctx.response().setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getContent());
                 }
             });
         };
@@ -101,10 +101,10 @@ public class ConsultationHandler {
             }
             consultationDao.updateConsultation(consultation, responseMsg -> {
                 if (responseMsg.getCode().getCode() == HttpCode.OK.getCode()){
-                    ctx.response().end(responseMsg.getMsg());
+                    ctx.response().end(responseMsg.getContent());
                 }
                 else{
-                    ctx.response().setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getMsg());
+                    ctx.response().setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getContent());
                 }
             });
         };

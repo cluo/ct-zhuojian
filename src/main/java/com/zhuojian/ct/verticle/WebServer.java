@@ -4,10 +4,14 @@ import com.zhuojian.ct.annotations.HandlerDao;
 import com.zhuojian.ct.annotations.RouteHandler;
 import com.zhuojian.ct.annotations.RouteMapping;
 import com.zhuojian.ct.annotations.RouteMethod;
+import com.zhuojian.ct.security.APIInterceptorHandler;
+import com.zhuojian.ct.security.FormLoginHandlerImpl;
 import com.zhuojian.ct.utils.AppUtil;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.ext.auth.AuthProvider;
+import io.vertx.ext.auth.jdbc.JDBCAuth;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.*;
@@ -66,8 +70,24 @@ public class WebServer extends AbstractVerticle {
         router.route().handler(BodyHandler.create().setUploadsDirectory(AppUtil.getUploadDir()));
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 
+        AuthProvider authProvider = JDBCAuth.create(AppUtil.getJdbcClient(vertx));
+        router.route().handler(UserSessionHandler.create(authProvider));
+
+        router.route("/api/*").handler(new APIInterceptorHandler(authProvider));
+        router.route("/upload").handler(new APIInterceptorHandler(authProvider));
+        router.route("/uploadFiles").handler(new APIInterceptorHandler(authProvider));
+
         // registerHandlers
         registerHandlers();
+
+        // Handles the actual login
+        router.route("/login").handler(new FormLoginHandlerImpl(authProvider));
+        // Implement logout
+        router.route("/logout").handler(context -> {
+            context.clearUser();
+            // Redirect back to the index page
+            context.response().putHeader("location", "/").setStatusCode(302).end();
+        });
 
         // Must be the latest handler to register
         router.route().handler(StaticHandler.create());

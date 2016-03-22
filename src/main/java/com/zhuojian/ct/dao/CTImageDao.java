@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by wuhaitao on 2016/3/10.
@@ -77,7 +76,7 @@ public class CTImageDao {
         });
     }
 
-    public void deleteCTImageById(int id, Handler<ResponseMsg> responseMsgHandler){
+    public void deleteCTImageById(int id, Handler<ResponseMsg<String>> responseMsgHandler){
         sqlite.getConnection(connection -> {
             if (connection.failed()){
                 LOGGER.error("connection sqlite failed!");
@@ -90,7 +89,7 @@ public class CTImageDao {
                         List<JsonObject> objs = result.result().getRows();
                         if (objs != null && !objs.isEmpty()) {
                             for (JsonObject obj : objs) {
-                                String image = obj.getString("file");
+                                String image = AppUtil.getUploadDir()+File.separator+obj.getString("file");
                                 File file = new File(image);
                                 if (file.exists()){
                                     file.delete();
@@ -161,7 +160,7 @@ public class CTImageDao {
         });
     }
 
-    public void addCTImage(CTImage ctImage, Handler<ResponseMsg> responseMsgHandler){
+    public void addCTImage(CTImage ctImage, Handler<ResponseMsg<String>> responseMsgHandler){
         sqlite.getConnection(connection -> {
             if (connection.failed()){
                /*System.out.println("connection sqlite failed!");*/
@@ -185,7 +184,7 @@ public class CTImageDao {
         });
     }
 
-    public void addCTImages(List<CTImage> ctImages, Handler<ResponseMsg> responseMsgHandler){
+    public void addCTImages(List<CTImage> ctImages, Handler<ResponseMsg<String>> responseMsgHandler){
         sqlite.getConnection(connection -> {
             if (connection.failed()){
                 LOGGER.error("connection sqlite failed!");
@@ -213,7 +212,7 @@ public class CTImageDao {
         });
     }
 
-    public void updateCTImage(CTImage ctImage, Handler<ResponseMsg> responseMsgHandler){
+    public void updateCTImage(CTImage ctImage, Handler<ResponseMsg<String>> responseMsgHandler){
         sqlite.getConnection(connection -> {
             if (connection.failed()){
                /*System.out.println("connection sqlite failed!");*/

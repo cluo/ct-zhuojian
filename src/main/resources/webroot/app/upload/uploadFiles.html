@@ -1,68 +1,75 @@
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span12 text-center">
-            <form class="form-horizontal" name="form">
-                <fieldset>
-                    <div id="legend" class="">
-                        <legend class="">CT图像上传</legend>
-                    </div>
-                    <div class="control-group">
-
-                        <!-- Select Basic -->
-                        <label class="control-label">CT图片类型</label>
-                        <div class="controls">
-                            <select class="input-xlarge" ng-model="type">
-                                <option value="1">肝脏</option>
-                                <option value="2">肺部</option></select>
+<section class="content-header">
+    <h1>
+        CT图像上传
+    </h1>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-8">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">多文件上传</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form class="form-horizontal" name="form">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">CT图片类型</label>
+                            <div class="col-sm-10">
+                                <select class="form-control input-xlarge" ng-model="type">
+                                    <option value="1">肝脏</option>
+                                    <option value="2">肺部</option></select>
+                            </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">CT文件路径</label>
 
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">CT文件路径</label>
-
-                        <!-- File Upload -->
-                        <div class="controls">
-                            <input class="input-file" ngf-select ng-model="files" ngf-multiple="true" name="files" type="file">
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label" name="id">会诊号</label>
-                        <div class="controls">
-                            <input type="text" placeholder="会诊号" class="input-xlarge" ng-model="id">
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">上传进度</label>
-
-                        <div class="controls">
-                            <div class="progress progress-striped active">
-                                <div class="bar" ng-style="bar">
+                            <!-- File Upload -->
+                            <div class="col-sm-10">
+                                <div class="form-control">
+                                    <input class="input-file" ngf-select ng-model="files" ngf-multiple="true" name="files" type="file">
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" name="id">会诊号</label>
+                            <div class="col-sm-10">
+                                <input type="text" placeholder="会诊号" class="form-control input-xlarge" ng-model="id">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">上传进度</label>
 
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label"></label>
+                            <div class="col-sm-10">
+                                <div class="form-control">
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-aqua" ng-style="bar">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <!-- Button -->
-                        <div class="controls">
-                            <button class="btn btn-success" type="submit" ng-click="submit()">上传</button>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">上传状态</label>
+                            <div class="col-sm-10">
+                                <div class="form-control" ng-bind="result"></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label"></label>
+                    <!-- /.box-body -->
 
-                        <!-- Button -->
-                        <div class="controls" ng-bind="result">
-                        </div>
+                    <div class="box-footer">
+                        <button class="btn btn-success pull-right" type="submit" ng-click="submit()">上传</button>
                     </div>
-
-                </fieldset>
-            </form>
+                </form>
+            </div>
+            <!-- /.box -->
         </div>
     </div>
-</div>
+</section>
+<!-- /.content -->

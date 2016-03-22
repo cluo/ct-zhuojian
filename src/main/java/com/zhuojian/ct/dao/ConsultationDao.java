@@ -142,7 +142,7 @@ public class ConsultationDao {
         });
     }
 
-    public void addConsultation(Consultation consultation, Handler<ResponseMsg> responseMsgHandler){
+    public void addConsultation(Consultation consultation, Handler<ResponseMsg<String>> responseMsgHandler){
         sqlite.getConnection(connection -> {
             if (connection.failed()){
                /*System.out.println("connection sqlite failed!");*/
@@ -157,7 +157,7 @@ public class ConsultationDao {
                 if (insertResult.succeeded()){
                     /*System.out.println("insert data success!");*/
                     LOGGER.info("insert data success!");
-                    responseMsgHandler.handle(new ResponseMsg(HttpCode.OK, "insert consultation success!"));
+                    responseMsgHandler.handle(new ResponseMsg<String>(HttpCode.OK, "insert consultation success!"));
                 }
                 else{
                     /*System.out.println("insert data failed!");*/
@@ -168,7 +168,7 @@ public class ConsultationDao {
         });
     }
 
-    public void updateConsultation(Consultation consultation, Handler<ResponseMsg> responseMsgHandler){
+    public void updateConsultation(Consultation consultation, Handler<ResponseMsg<String>> responseMsgHandler){
         sqlite.getConnection(connection -> {
             if (connection.failed()){
                /*System.out.println("connection sqlite failed!");*/
