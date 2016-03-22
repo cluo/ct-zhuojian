@@ -1,5 +1,5 @@
     <!-- The styles -->
-    <link id="bs-css" href="assets/lucifer/css/bootstrap-cerulean.min.css" rel="stylesheet">
+    <link href="assets/lucifer/css/bootstrap-cerulean.min.css" rel="stylesheet">
 
     <link href="assets/lucifer/css/charisma-app.css" rel="stylesheet">
     <link href='assets/lucifer/bower_components/fullcalendar/dist/fullcalendar.css' rel='stylesheet'>
@@ -26,7 +26,7 @@
     <div class="navbar-inner">
         <p class="navbar-brand">
             <img alt="Charisma Logo" src="assets/lucifer/img/logo20.png" class="hidden-xs"/>
-            <span>CT智能诊断系统</span>
+            <span>CT智能诊断系统{{data}}</span>
         </p>
         <ul class="collapse navbar-collapse nav navbar-nav top-menu">
             <li><p><i class="glyphicon glyphicon-globe"></i> 浙大信电系</p></li>
@@ -55,11 +55,11 @@
                             <table class="table table-striped table-bordered bootstrap-datatable datatable responsive">
                                 <thead>
                                 <tr>
-                                    <th>Username</th>
-                                    <th>Date registered</th>
+                                    <th>会诊号</th>
+                                    <th>日期</th>
                                     <th>Role</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
+                                    <th>诊断结果</th>
+                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>

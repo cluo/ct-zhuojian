@@ -8,9 +8,6 @@ import io.vertx.ext.dropwizard.DropwizardMetricsOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.net.URI;
-
 /**
  * Created by wuhaitao on 2016/2/25.
  */
