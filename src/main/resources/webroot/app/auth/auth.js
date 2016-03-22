@@ -68,8 +68,8 @@ angular.module('auth', ['angular-storage', 'ui.router'])
             if (!userPermissions) {
                 userPermissions = store.get('permissions');
             }
-            console.log('permission:'+permission);
-            console.log(userPermissions);
+            /*console.log('permission:'+permission);
+            console.log(userPermissions);*/
             if (userPermissions.length > 0) {
                 for (var i = 0; i  < userPermissions.length; i++) {
                     var entry = userPermissions[i];
@@ -89,7 +89,7 @@ angular.module('auth', ['angular-storage', 'ui.router'])
         function initPermission() {
             $http.post('/api/permission')
                 .then(function(response) {
-                    console.log('permissions:'+response.data);
+                    /*console.log('permissions:'+response.data);*/
                     UserContext.setPermissions(response.data);
                 }, function(error) {
                     console.log(error);
