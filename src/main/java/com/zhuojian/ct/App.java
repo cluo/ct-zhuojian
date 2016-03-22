@@ -25,7 +25,7 @@ public class App {
         options.setMaxEventLoopExecuteTime(Long.MAX_VALUE);
         Vertx vertx = Vertx.vertx(options);
         vertx.deployVerticle(WebServer.class.getName());
-        /*vertx.deployVerticle(LesionRecognitionServer.class.getName());*/
+        vertx.deployVerticle(LesionRecognitionServer.class.getName());
 
         /** 添加钩子函数,保证vertx的正常关闭 */
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {

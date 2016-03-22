@@ -71,45 +71,6 @@ public class UserHandler {
             userDao.addUser(new User(username, password, roleStr), stringResponseMsg -> {
                 ctx.response().setChunked(true).setStatusCode(stringResponseMsg.getCode().getCode()).end(stringResponseMsg.getContent());
             });
-
-            /*if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
-                LOGGER.error("Username and Password cannot be null");
-                JsonObject error = new JsonObject();
-                error.put("error", "Username and Password cannot be null");
-                ctx.response().setStatusCode(HttpCode.BAD_REQUEST.getCode()).end(error.encode());
-            }
-
-            String salt = AppUtil.computeHash(username, null, "SHA-512");
-            String passwordHash = AppUtil.computeHash(password, salt, "SHA-512");
-
-            JDBCClient client = AppUtil.getJdbcClient(Vertx.vertx());
-
-            client.getConnection(conn -> {
-
-                if (conn.failed()) {
-                    LOGGER.error(conn.cause().getMessage(), conn.cause());
-                    ctx.fail(400);
-                }
-
-                SQLUtil.query(conn.result(), "select * from USER where USERNAME = ?", new JsonArray().add(username), rs -> {
-                    if (rs.getResults().size() >= 1) {
-                        SQLUtil.close(conn.result());
-                        LOGGER.error("User with username {} already exists..", username);
-                        JsonObject error = new JsonObject();
-                        error.put("error", "User with username " + username+ " already exists");
-                        ctx.response().setStatusCode(205).end(error.encode());
-                    }
-
-                    JsonArray params = new JsonArray();
-                    params.add(username).add(passwordHash).add(salt);
-                    SQLUtil.update(conn.result(), "insert into USER (USERNAME, PASSWORD, PASSWORD_SALT) values (?, ?, ?)", params, insert -> {
-                        SQLUtil.query(conn.result(), "select USERNAME from USER where USERNAME = ?", new JsonArray().add(username), rs2 -> {
-                            SQLUtil.close(conn.result());
-                            ctx.response().end(rs2.getRows().get(0).encode());
-                        });
-                    });
-                });
-            });*/
         };
     }
 
@@ -180,25 +141,6 @@ public class UserHandler {
             userDao.deleteUser(username, stringResponseMsg -> {
                 ctx.response().setChunked(true).setStatusCode(stringResponseMsg.getCode().getCode()).end(stringResponseMsg.getContent());
             });
-            /*if (StringUtils.isBlank(username)) {
-                LOGGER.error("Username is blank");
-                ctx.fail(404);
-            }
-
-            JDBCClient client = AppUtil.getJdbcClient(Vertx.vertx());
-            client.getConnection(conn -> {
-                if (conn.failed()) {
-                    LOGGER.error(conn.cause().getMessage(), conn.cause());
-                    ctx.fail(404);
-                }
-
-                SQLUtil.update(conn.result(), "delete from USER where USERNAME = ?", new JsonArray().add(username), res -> {
-                    LOGGER.info("delete user {} success!", username);
-                    SQLUtil.close(conn.result());
-                    ctx.response().end();
-                });
-
-            });*/
         };
     }
 

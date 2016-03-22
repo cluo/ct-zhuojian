@@ -41,7 +41,7 @@ public class UserDao {
         sqlite.getConnection(connection -> {
             if (connection.succeeded()){
                 SQLConnection conn = connection.result();
-                conn.query("select * from USER", res -> {
+                conn.query("select USER.USERNAME,USER_ROLES.ROLE from USER inner join USER_ROLES on USER.USERNAME = USER_ROLES.USERNAME", res -> {
                     if (res.succeeded()){
                         ResponseMsg<List<JsonObject>> users = new ResponseMsg(res.result().getRows());
                         done.handle(users);

@@ -19,12 +19,14 @@
                         <thead>
                         <tr>
                             <th>用户名</th>
+                            <th>用户类型</th>
                             <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="user in users">
                             <td>{{user.USERNAME}}</td>
+                            <td>{{user.ROLE}}</td>
                             <td>
                                 <a ng-click="delete(user)" class="btn btn-danger">删除</a>
                             </td>
