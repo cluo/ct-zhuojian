@@ -1,7 +1,8 @@
 /**
  * Created by wuhaitao on 2016/3/9.
  */
-angular.module('consultation',['ui.router', 'record', 'ct.area', 'tm.pagination', 'auth'])
+
+angular.module('consultation',['ui.router', 'record', 'ct.area', 'tm.pagination', 'auth', 'lung'])
     .config(function($stateProvider, $urlRouterProvider){
         $stateProvider.state('consultation', {
             url: '/consultation',

@@ -42,6 +42,7 @@
                             <td>
                                 <a class="btn btn-success" href="#/record/{{ctImage.id}}">病历</a>
                                 <a ng-if="main.isPermitted('cad')" class="btn btn-info" ng-click="goCAD(ctImage)">辅助诊断</a>
+                                <a href="#/lung/{{ctImage.file}}" class="btn btn-info">肺部辅助诊断</a>
                                 <a ng-if="main.isPermitted('delete_ct')" class="btn btn-danger" ng-click="deleteCT(ctImage.id)">删除</a>
                             </td>
                         </tr>
