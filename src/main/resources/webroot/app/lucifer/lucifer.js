@@ -6,8 +6,8 @@ userModule
     .config(function ($stateProvider) {
         $stateProvider.state('ctct', {
             url: '/lung/:id',
-            templateUrl: 'app/lucifer/galary.html',
-//            controller: 'HelloWorld'
+            templateUrl: 'app/lucifer/pred.html',
+            controller: 'HelloWorld'
         });
     })
     .controller('HelloWorld', function ($scope, $stateParams, $http) {

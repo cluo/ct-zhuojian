@@ -25,7 +25,8 @@ public class CNNPredict {
     }
 
     private DicomReader reader = new DicomReaderImpl();
-    private CNN cnn = CNN.loadModel("model");
+//    private CNN cnn = CNN.loadModel("model");
+    private CNN cnn;
 
     public int getPred(File file) throws Exception {
         double[] data = reader.readTmp128DataInLine(file, DcmConstant.XRESIZE, DcmConstant.YRESIZE);
@@ -35,7 +36,7 @@ public class CNNPredict {
         return rst;
     }
 
-    public int getPred(String uuid) throws Exception {
+    public double[] getPred(String uuid) throws Exception {
         int val = -1;
 
         String outFileName = fileService(uuid);
@@ -44,19 +45,19 @@ public class CNNPredict {
 
         // shell 调用 matlab 执行任务
         double[] result = JavaShellUtil.execShellAndMatlab(outFileName);
-        double large = result[0];
-        double small = result[1];
-        double normal = result[2];
-        if (large > small && large > normal)
-            val = 0;
-        else if (small > large && small > normal)
-            val = 1;
-        else
-            val = 2;
+//        double large = result[0];
+//        double small = result[1];
+//        double normal = result[2];
+//        if (large > small && large > normal)
+//            val = 0;
+//        else if (small > large && small > normal)
+//            val = 1;
+//        else
+//            val = 2;
 
         // shell 任务执行结束，删除 文件
         deleteFile(outFileName);
-        return  val;
+        return  result;
     }
 
     // 将数据库中的文件存放到进程交互的文件夹DcmDir下，成功则返回写出的文件名；否则返回null。
@@ -99,7 +100,7 @@ public class CNNPredict {
 
     public static void main(String[] args) throws Exception {
         CNNPredict pre = new CNNPredict();
-       pre.getPred("7dd88ac4-67d5-40ae-93b1-ee552f7baf58");
+        System.out.println(pre.getPred("0a2cbfb7-66c5-49f1-bc63-650df019cd96"));
 
         /**
 

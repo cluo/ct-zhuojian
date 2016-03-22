@@ -31,18 +31,26 @@ public class LungRecogHander {
     @RouteMapping(value = "/:id", method = RouteMethod.GET)
     public Handler<RoutingContext> ctimages() {
         return ctx -> {
-            String id = ctx.request().getParam("id");
-            LOGGER.debug("Start get ct file by id "+id);
+            String fileName = ctx.request().getParam("id");
+            LOGGER.debug("Start get ct file by id " + fileName);
 
-            //通过id找到文件名xxx
-            String fileName = "7dd88ac4-67d5-40ae-93b1-ee552f7baf58";
             try {
-                int val = cnnPredict.getPred(fileName);
-                JsonArray cts = new JsonArray();
+                double[] val = cnnPredict.getPred(fileName);
                 JsonObject obj = new JsonObject();
-                obj.put("desc", val);
-                cts.add(obj);
-                ctx.response().end(cts.encode());
+                String desc = "";
+                if (val[0] > val[1] && val[0] > val[2]) {
+                    desc = "大结节";
+                } else if (val[1] >val[0] && val[1] > val[2]) {
+                    desc = "小结节";
+                } else {
+                    desc = "正常";
+                }
+                obj.put("desc", desc);
+                obj.put("djj", val[0]);
+                obj.put("xjj", val[1]);
+                obj.put("normal", val[2]);
+                obj.put("file", fileName);
+                ctx.response().end(obj.encode());
             } catch (Exception e) {
                 e.printStackTrace();
                 LOGGER.error(e.getMessage());

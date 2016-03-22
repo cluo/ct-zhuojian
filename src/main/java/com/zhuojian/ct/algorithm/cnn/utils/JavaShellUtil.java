@@ -25,16 +25,16 @@ public class JavaShellUtil {
 
         File rstFile = new File(fileName + ".rst");
 
-        if (!rstFile.exists()) {
-            List<String> in = new ArrayList<>();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                in.add(line);
-            }
-            String msg = in.toString();
-            throw new Exception(msg);
-        }
+//        if (!rstFile.exists()) {
+//            List<String> in = new ArrayList<>();
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                in.add(line);
+//            }
+//            String msg = in.toString();
+//            throw new Exception(msg);
+//        }
 
         BufferedReader reader = new BufferedReader(new FileReader(new File(fileName + ".rst")));
         String[] resultString = reader.readLine().trim().split(separator);
@@ -42,6 +42,7 @@ public class JavaShellUtil {
         for (int i = 0; i < result.length; i++) {
             result[i] = Double.parseDouble(resultString[i]);
         }
+        reader.close();
         return result;
     }
 
