@@ -11,6 +11,7 @@ import com.zhuojian.ct.utils.RoleMap;
 import com.zhuojian.ct.utils.SQLUtil;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.jdbc.JDBCClient;
@@ -37,16 +38,18 @@ public class UserHandler {
         return ctx -> {
             LOGGER.debug("Start get list");
             userDao.getUsers(responseMsg -> {
+                HttpServerResponse response = ctx.response();
+                response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
                 if (responseMsg.getContent() instanceof List){
                     JsonArray array = new JsonArray();
                     List<JsonObject> jsonObjects = (List<JsonObject>) responseMsg.getContent();
                     for (JsonObject object : jsonObjects){
                         array.add(object);
                     }
-                    ctx.response().setChunked(true).setStatusCode(responseMsg.getCode().getCode()).end(array.encode());
+                    response.setChunked(true).setStatusCode(responseMsg.getCode().getCode()).end(array.encode());
                 }
                 else{
-                    ctx.response().setChunked(true).setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getContent().toString());
+                    response.setChunked(true).setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getContent().toString());
                 }
             });
         };
@@ -60,16 +63,18 @@ public class UserHandler {
             String password = user.getString("password");
             int role = Integer.parseInt(user.getString("role"));
             String roleStr = "";
+            HttpServerResponse response = ctx.response();
+            response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
             try {
                 roleStr = RoleMap.getRole(role);
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
-                ctx.response().setStatusCode(HttpCode.BAD_REQUEST.getCode()).end(e.getMessage());
+                response.setStatusCode(HttpCode.BAD_REQUEST.getCode()).end(e.getMessage());
                 return;
             }
 
             userDao.addUser(new User(username, password, roleStr), stringResponseMsg -> {
-                ctx.response().setChunked(true).setStatusCode(stringResponseMsg.getCode().getCode()).end(stringResponseMsg.getContent());
+                response.setChunked(true).setStatusCode(stringResponseMsg.getCode().getCode()).end(stringResponseMsg.getContent());
             });
         };
     }
@@ -78,6 +83,8 @@ public class UserHandler {
     public Handler<RoutingContext> edit() {
         return ctx -> {
             String username = ctx.request().getParam("username");
+            HttpServerResponse response = ctx.response();
+            response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
             if (StringUtils.isBlank(username)) {
                 LOGGER.error("Username is blank");
                 ctx.fail(404);
@@ -94,11 +101,11 @@ public class UserHandler {
                 SQLUtil.query(conn.result(), "select USERNAME from USER where USERNAME = ?", new JsonArray().add(username), res -> {
                     SQLUtil.close(conn.result());
                     if (res.getRows().size() == 1) {
-                        ctx.response().end(res.getRows().get(0).encode());
+                        response.end(res.getRows().get(0).encode());
                     } else {
                         JsonObject error = new JsonObject();
                         error.put("error", "Record not found");
-                        ctx.response().setStatusCode(205).end(error.encode());
+                        response.setStatusCode(205).end(error.encode());
                     }
                 });
             });
@@ -110,6 +117,8 @@ public class UserHandler {
         return ctx -> {
             JsonObject user = ctx.getBodyAsJson();
             String username = user.getString("username");
+            HttpServerResponse response = ctx.response();
+            response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
             if (StringUtils.isBlank(username)) {
                 LOGGER.error("Username is blank");
                 ctx.fail(404);
@@ -127,7 +136,7 @@ public class UserHandler {
                 SQLUtil.update(conn.result(), "update USER set FIRST_NAME = ?, LAST_NAME = ?, ADDRESS = ? where USERNAME = ?", params, res -> {
                     SQLUtil.query(conn.result(), "select USERNAME, FIRST_NAME, LAST_NAME, ADDRESS from USER where USERNAME = ?", new JsonArray().add(username), rs -> {
                         SQLUtil.close(conn.result());
-                        ctx.response().end(rs.getRows().get(0).encode());
+                        response.end(rs.getRows().get(0).encode());
                     });
                 });
             });
@@ -139,7 +148,9 @@ public class UserHandler {
         return ctx -> {
             String username = ctx.request().getParam("username");
             userDao.deleteUser(username, stringResponseMsg -> {
-                ctx.response().setChunked(true).setStatusCode(stringResponseMsg.getCode().getCode()).end(stringResponseMsg.getContent());
+                HttpServerResponse response = ctx.response();
+                response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
+                response.setChunked(true).setStatusCode(stringResponseMsg.getCode().getCode()).end(stringResponseMsg.getContent());
             });
         };
     }

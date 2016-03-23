@@ -3,6 +3,8 @@
  */
 
 angular.module('consultation',['ui.router', 'record', 'ct.area', 'tm.pagination', 'auth', 'lung'])
+    /*.constant('BASE_URI', 'http://localhost:8080')*/
+    .constant('BASE_URI', '')
     .config(function($stateProvider, $urlRouterProvider){
         $stateProvider.state('consultation', {
             url: '/consultation',
@@ -16,13 +18,13 @@ angular.module('consultation',['ui.router', 'record', 'ct.area', 'tm.pagination'
         });
         $urlRouterProvider.otherwise('/consultation');
     })
-    .service('ConsultationService', function($http){
+    .service('ConsultationService', function($http, BASE_URI){
         var service = this;
         service.getConsultations = function(){
-            return $http.get('/api/consultation');
+            return $http.get(BASE_URI+'/api/consultation');
         };
         service.getConsultationsByPage = function(postData){
-            return $http.post('/api/consultation/page', postData);
+            return $http.post(BASE_URI+'/api/consultation/page', postData);
         };
     })
     .controller('ConsultationCtrl', function($scope, ConsultationService){
@@ -61,18 +63,18 @@ angular.module('consultation',['ui.router', 'record', 'ct.area', 'tm.pagination'
 
         $scope.$watch('paginationConf.currentPage + paginationConf.itemsPerPage', getConsultationsByPage);
     })
-    .service('CTImageService', function($http){
+    .service('CTImageService', function($http, BASE_URI){
         var service = this;
         service.getCTImages = function(id){
-            return $http.get('/api/consultation/'+id);
+            return $http.get(BASE_URI+'/api/consultation/'+id);
         };
 
         service.deleteCT = function(id){
-            return $http.get('/api/consultation/deleteCT/'+id);
+            return $http.get(BASE_URI+'/api/consultation/deleteCT/'+id);
         };
 
         service.getCTImagesByPage = function(postData){
-            return $http.post('/api/consultation/ct/page', postData);
+            return $http.post(BASE_URI+'/api/consultation/ct/page', postData);
         };
     })
     .controller('CTImageCtrl', function($scope, $state, $stateParams, CTImageService){
@@ -101,6 +103,24 @@ angular.module('consultation',['ui.router', 'record', 'ct.area', 'tm.pagination'
                 },function(error){
                     console.log(error);
                 });
+        };
+
+        $scope.isLiver = function(type){
+            if(type == '肝脏'){
+                return true;
+            }
+            else{
+                return false;
+            }
+        };
+
+        $scope.isLung = function(type){
+            if(type == '肺部'){
+                return true;
+            }
+            else{
+                return false;
+            }
         };
 
         $scope.goCAD = function(ctImage){

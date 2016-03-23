@@ -45,6 +45,7 @@ public class CTImageHandler {
                     }
                 }
                 HttpServerResponse response = ctx.response();
+                response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
                 response.setChunked(true);
                 response.end(cts.encode());
             });
@@ -57,6 +58,7 @@ public class CTImageHandler {
             int id = Integer.parseInt(ctx.request().getParam("id"));
             ctImageDao.deleteCTImageById(id, result -> {
                 HttpServerResponse response = ctx.response();
+                response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
                 response.setChunked(true);
                 response.setStatusCode(result.getCode().getCode()).end(result.getContent());
             });
@@ -77,6 +79,7 @@ public class CTImageHandler {
 
                 }
                 HttpServerResponse response = ctx.response();
+                response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
                 response.setChunked(true);
                 response.end(obj.encode());
             });
@@ -94,6 +97,7 @@ public class CTImageHandler {
             ctImage.setDiagnosis(diagnosis);
             ctImageDao.updateCTImage(ctImage, responseMsg -> {
                 HttpServerResponse response = ctx.response();
+                response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
                 response.setChunked(true);
                 response.setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getContent());
             });
@@ -109,6 +113,7 @@ public class CTImageHandler {
             int pageSize = data.getInteger("pageSize");
             ctImageDao.getCTImagesByPage(id, pageIndex, pageSize, result -> {
                 HttpServerResponse response = ctx.response();
+                response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
                 response.setChunked(true);
                 if (result != null) {
                     /*int count = result.getInteger("count");

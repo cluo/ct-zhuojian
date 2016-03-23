@@ -2,6 +2,10 @@
  * Created by wuhaitao on 2016/3/10.
  */
 angular.module('record',['ui.router', 'auth'])
+    /*.constant('BASE_URI', 'http://localhost:8080')
+    .constant('UPLOAD_FILE', 'http://localhost:8080/upload/')*/
+    .constant('BASE_URI', '')
+    .constant('UPLOAD_FILE', 'upload/')
     .config(function($stateProvider){
         $stateProvider.state('record', {
             url: '/record/:id',
@@ -9,13 +13,13 @@ angular.module('record',['ui.router', 'auth'])
             controller: 'RecordCtrl'
         });
     })
-    .service('RecordService', function($http){
+    .service('RecordService', function($http, BASE_URI){
         var service = this;
         service.getRecord = function(id){
-            return $http.get('/api/consultation/record/'+id);
+            return $http.get(BASE_URI+'/api/consultation/record/'+id);
         };
     })
-    .controller('RecordCtrl', function($scope, $state, $stateParams, RecordService){
+    .controller('RecordCtrl', function($scope, $state, $stateParams, RecordService, UPLOAD_FILE){
         var id = $stateParams.id;
         $scope.id = id;
         /*$scope.goArea = function(){
@@ -25,7 +29,7 @@ angular.module('record',['ui.router', 'auth'])
             RecordService.getRecord(id)
                 .then(function(result){
                     $scope.type = result.data.type;
-                    $scope.file = 'upload/'+result.data.file;
+                    $scope.file = UPLOAD_FILE+result.data.file;
                     $scope.diagnosis = result.data.diagnosis;
                 },function(error){
                     console.log(error);

@@ -2,6 +2,9 @@
  * Created by wuhaitao on 2016/2/26.
  */
 angular.module('ct.area', ['ui.router', 'auth'])
+    /*.constant('BASE_URI', 'http://localhost:8080')*/
+    .constant('BASE_URI', '')
+    .constant('UPLOAD_FILE', 'upload/')
     .config(function ($stateProvider) {
         $stateProvider.state('area', {
             url: '/area/:image',
@@ -21,7 +24,7 @@ angular.module('ct.area', ['ui.router', 'auth'])
             controller: 'CADCtrl'
         });
     })
-    .controller('AreaCtrl', function($scope, $stateParams, $http) {
+    .controller('AreaCtrl', function($scope, $stateParams, $http, BASE_URI) {
         var img = $stateParams.image;
         var x1,x2,y1,y2;
 
@@ -31,7 +34,7 @@ angular.module('ct.area', ['ui.router', 'auth'])
         $scope.result = '';
 
         $scope.predictLesionType = function () {
-            $http.post('/api/ct/predict',{
+            $http.post(BASE_URI+'/api/ct/predict',{
                 "image":$scope.myImage,
                 "x1":x1,
                 "y1":y1,
@@ -66,7 +69,7 @@ angular.module('ct.area', ['ui.router', 'auth'])
         });
 
     })
-    .controller('CADCtrl', function($scope, $stateParams, $http) {
+    .controller('CADCtrl', function($scope, $stateParams, $http, BASE_URI, UPLOAD_FILE) {
         /*var img = $stateParams.ctImage;
         console.log(img);*/
         console.log($stateParams)
@@ -74,7 +77,7 @@ angular.module('ct.area', ['ui.router', 'auth'])
 
         $scope.addFeatureResult = '';
 
-        $scope.myImage='upload/'+$stateParams.file;
+        $scope.myImage=UPLOAD_FILE+$stateParams.file;
         $scope.myCroppedImage='';
 
         $scope.result = '';
@@ -84,7 +87,7 @@ angular.module('ct.area', ['ui.router', 'auth'])
         $scope.consultationId = $stateParams.consultationId;
 
         $scope.updateDiagnosis = function(){
-            $http.post('/api/consultation/record/updateDiagnosis',{
+            $http.post(BASE_URI+'/api/consultation/record/updateDiagnosis',{
                 'id':$scope.id,
                 'diagnosis':$scope.diagnosis
             }).then(function (result) {
@@ -94,7 +97,7 @@ angular.module('ct.area', ['ui.router', 'auth'])
             });
         };
         $scope.predictLesionType = function () {
-            $http.post('/api/ct/predict',{
+            $http.post(BASE_URI+'/api/ct/predict',{
                 "image":$scope.myImage,
                 "x1":x1,
                 "y1":y1,
@@ -107,7 +110,7 @@ angular.module('ct.area', ['ui.router', 'auth'])
             });
         };
         $scope.addFeatureData = function () {
-            $http.post('/api/ct/addfeature',{
+            $http.post(BASE_URI+'/api/ct/addfeature',{
                 "image":$scope.myImage,
                 "x1":x1,
                 "y1":y1,

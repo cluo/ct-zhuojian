@@ -1,5 +1,6 @@
 package com.zhuojian.ct.security;
 
+import com.zhuojian.ct.model.HttpCode;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerRequest;
@@ -65,7 +66,8 @@ public class FormLoginHandlerImpl implements FormLoginHandler {
     public void handle(RoutingContext context) {
         HttpServerRequest req = context.request();
         if (req.method() != HttpMethod.POST) {
-            context.fail(405); // Must be a POST
+            /*context.fail(405); // Must be a POST*/
+            context.response().putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60").setStatusCode(HttpCode.OK.getCode()).end(); // 跨域访问请求
         } else {
             JsonObject params = context.getBodyAsJson();
             String username = params.getString(usernameParam);
@@ -80,7 +82,7 @@ public class FormLoginHandlerImpl implements FormLoginHandler {
                     if (res.succeeded()) {
                         User user = res.result();
                         context.setUser(user);
-                        req.response().putHeader(HttpHeaders.CONTENT_TYPE, "application/json").end(user.principal().encode());
+                        req.response().putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60").putHeader(HttpHeaders.CONTENT_TYPE, "application/json").setStatusCode(HttpCode.OK.getCode()).end(user.principal().encode());
                     } else {
                         context.fail(403);  // Failed login
                     }
@@ -90,7 +92,7 @@ public class FormLoginHandlerImpl implements FormLoginHandler {
     }
 
     private void doRedirect(HttpServerResponse response, String url) {
-        response.putHeader("location", url).setStatusCode(302).end();
+        response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60").putHeader("location", url).setStatusCode(302).end();
     }
 
 }

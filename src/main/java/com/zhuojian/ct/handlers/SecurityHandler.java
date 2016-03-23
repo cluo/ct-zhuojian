@@ -7,6 +7,7 @@ import com.zhuojian.ct.utils.AppUtil;
 import com.zhuojian.ct.utils.SQLUtil;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.User;
@@ -25,6 +26,8 @@ public class SecurityHandler {
         return ctx -> {
             JDBCClient client = AppUtil.getJdbcClient(Vertx.vertx());
             client.getConnection(conn -> {
+                HttpServerResponse response = ctx.response();
+                response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
                 if (conn.failed()) {
                     LOGGER.error(conn.cause().getMessage(), conn.cause());
                     ctx.fail(400);
@@ -40,7 +43,7 @@ public class SecurityHandler {
                     for (JsonObject permission : rs.getRows()) {
                         permissions.add(permission);
                     }
-                    ctx.response().end(permissions.encode());
+                    response.end(permissions.encode());
                 });
             });
         };

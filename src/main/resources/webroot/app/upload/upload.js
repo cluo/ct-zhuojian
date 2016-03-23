@@ -2,6 +2,10 @@
  * Created by wuhaitao on 2016/3/8.
  */
 angular.module('upload', ['ui.router','ngFileUpload', 'auth'])
+    /*.constant('BASE_URI', 'http://localhost:8080')
+    .constant('UPLOAD_URI', 'http://localhost:8080/upload')*/
+    .constant('BASE_URI', '')
+    .constant('UPLOAD_URI', '/upload')
     .config(function ($stateProvider) {
         $stateProvider
             .state('upload', {
@@ -15,7 +19,7 @@ angular.module('upload', ['ui.router','ngFileUpload', 'auth'])
                 controller: 'UploadFilesCtrl',
             });
     })
-    .controller('UploadCtrl', ['$scope', 'Upload', function ($scope, Upload) {
+    .controller('UploadCtrl', ['$scope', 'Upload', 'BASE_URI', 'UPLOAD_URI', function ($scope, Upload, BASE_URI, UPLOAD_URI) {
         // upload later on form submit or something similar
         $scope.id = "";
         $scope.type = 1;
@@ -31,7 +35,7 @@ angular.module('upload', ['ui.router','ngFileUpload', 'auth'])
         // upload on file select or drop
         $scope.upload = function (file) {
             Upload.upload({
-                url: '/upload',
+                url: UPLOAD_URI,
                 data: {file: file, 'id': $scope.id, 'type':$scope.type}
             }).then(function (resp) {
                 $scope.result = 'upload success!';
@@ -45,7 +49,7 @@ angular.module('upload', ['ui.router','ngFileUpload', 'auth'])
             });
         };
     }])
-    .controller('UploadFilesCtrl', ['$scope', 'Upload', function ($scope, Upload) {
+    .controller('UploadFilesCtrl', ['$scope', 'Upload', 'BASE_URI', 'UPLOAD_URI', function ($scope, Upload, UPLOAD_URI) {
         // upload later on form submit or something similar
         $scope.id = "";
         $scope.type = 1;
@@ -68,7 +72,7 @@ angular.module('upload', ['ui.router','ngFileUpload', 'auth'])
                 }*/
                 // or send them all together for HTML5 browsers:
                 Upload.upload({
-                    url: '/upload/files',
+                    url: UPLOAD_URI+'/files',
                     data: {file: files,'id': $scope.id, 'type':$scope.type}
                 }).then(function (resp) {
                     $scope.result = 'upload success!';

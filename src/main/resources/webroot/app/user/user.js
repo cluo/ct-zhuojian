@@ -3,6 +3,7 @@
  */
 angular.module('user', ['ui.router', 'auth'])
     .constant('ENDPOINT_URI', '/api')
+    /*.constant('BASE_URI', 'http://localhost:8080')*/
     .constant('BASE_URI', '')
     .config(function($stateProvider) {
         $stateProvider
@@ -26,31 +27,31 @@ angular.module('user', ['ui.router', 'auth'])
             })
         ;
     })
-    .service('UserService', function($http, ENDPOINT_URI) {
+    .service('UserService', function($http, BASE_URI, ENDPOINT_URI) {
         var service = this;
 
         service.getAllUser = function() {
-            return $http.get(ENDPOINT_URI + '/users');
+            return $http.get(BASE_URI + ENDPOINT_URI + '/users');
         };
 
         service.addUser = function(user) {
-            return $http.post(ENDPOINT_URI + '/users', user);
+            return $http.post(BASE_URI + ENDPOINT_URI + '/users', user);
         };
 
         service.getUserById = function(username) {
-            return $http.get(ENDPOINT_URI + '/users/' + username);
+            return $http.get(BASE_URI + ENDPOINT_URI + '/users/' + username);
         };
 
         service.updateUser = function(user) {
-            return $http.put(ENDPOINT_URI + '/users/' + user.username, user);
+            return $http.put(BASE_URI + ENDPOINT_URI + '/users/' + user.username, user);
         };
 
         service.deleteUser = function(username) {
-            return $http.delete(ENDPOINT_URI + '/users/' + username);
+            return $http.delete(BASE_URI + ENDPOINT_URI + '/users/' + username);
         };
 
         service.getUserPermissions = function() {
-            return $http.post(ENDPOINT_URI + '/permission');
+            return $http.post(BASE_URI + ENDPOINT_URI + '/permission');
         }
 
     })

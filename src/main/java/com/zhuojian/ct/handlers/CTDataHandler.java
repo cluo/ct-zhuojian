@@ -8,6 +8,7 @@ import com.zhuojian.ct.dao.FeatureDao;
 import com.zhuojian.ct.model.HttpCode;
 import com.zhuojian.ct.utils.FileUtil;
 import io.vertx.core.Handler;
+import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
@@ -53,7 +54,9 @@ public class CTDataHandler {
                     obj.put("date", "2015-02-25");
                     cts.add(obj);
                 }
-                ctx.response().end(cts.encode());
+                HttpServerResponse response = ctx.response();
+                response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
+                response.end(cts.encode());
             } catch (UnsupportedEncodingException e) {
                 LOGGER.error(e.getMessage());
                 ctx.fail(400);
@@ -75,7 +78,9 @@ public class CTDataHandler {
                     obj.put("src", ct);
                     cts.add(obj);
                 }
-                ctx.response().end(cts.encode());
+                HttpServerResponse response = ctx.response();
+                response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
+                response.end(cts.encode());
             } catch (UnsupportedEncodingException e) {
                 LOGGER.error(e.getMessage());
                 ctx.fail(400);
@@ -93,6 +98,8 @@ public class CTDataHandler {
             int x2 = data.getInteger("x2");
             int y2 = data.getInteger("y2");
             URI uri = null;
+            HttpServerResponse re = ctx.response();
+            re.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
             try {
                 uri = new URIBuilder().setHost("http://127.0.0.1:8081/predict")
                         .setPort(8081)
@@ -116,18 +123,18 @@ public class CTDataHandler {
                         String res = EntityUtils.toString(entity,"utf-8");
                         JsonObject result = new JsonObject();
                         result.put("lesion", res);
-                        ctx.response().end(result.encode());
+                        re.end(result.encode());
                     }
                 } else {
-                    ctx.response().setStatusCode(500).end();
+                    re.setStatusCode(500).end();
                 }
 
             } catch (URISyntaxException e) {
                 e.printStackTrace();
-                ctx.response().setStatusCode(500).end();
+                re.setStatusCode(500).end();
             } catch (IOException e) {
                 e.printStackTrace();
-                ctx.response().setStatusCode(500).end();
+                re.setStatusCode(500).end();
             }
         };
     }
@@ -144,21 +151,23 @@ public class CTDataHandler {
             String label = data.getString("label");
             ImageFeature imageFeature = new ImageFeature();
             JsonObject result = new JsonObject();
+            HttpServerResponse re = ctx.response();
+            re.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
             try {
                 double[] feature = imageFeature.getFeature(image, x1, y1, x2, y2);
                 featureDao.addFeature(feature, label, res -> {
                     if ("success".equals(res)){
                         result.put("result", "特征入库成功");
-                        ctx.response().setChunked(true).setStatusCode(HttpCode.OK.getCode()).end(result.encode());
+                        re.setChunked(true).setStatusCode(HttpCode.OK.getCode()).end(result.encode());
                     }
                     else{
                         result.put("result", res);
-                        ctx.response().setChunked(true).setStatusCode(HttpCode.INTERNAL_SERVER_ERROR.getCode()).end(result.encode());
+                        re.setChunked(true).setStatusCode(HttpCode.INTERNAL_SERVER_ERROR.getCode()).end(result.encode());
                     }
                 });
             } catch (IOException e) {
                 result.put("result", e.getMessage());
-                ctx.response().setChunked(true).setStatusCode(HttpCode.NOT_FOUND.getCode()).end(result.encode());
+                re.setChunked(true).setStatusCode(HttpCode.NOT_FOUND.getCode()).end(result.encode());
             }
         };
     }

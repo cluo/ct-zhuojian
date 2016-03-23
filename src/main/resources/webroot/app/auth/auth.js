@@ -2,6 +2,7 @@
  * Created by wuhaitao on 2016/3/20.
  */
 angular.module('auth', ['angular-storage', 'ui.router'])
+    /*.constant('BASE_URI', 'http://localhost:8080')*/
     .constant('BASE_URI', '')
     .config(function($stateProvider, $urlRouterProvider, $httpProvider){
         $stateProvider
@@ -83,11 +84,11 @@ angular.module('auth', ['angular-storage', 'ui.router'])
         }
 
     })
-    .controller('MainCtrl', function ($rootScope, $state, $http, LoginService, UserContext) {
+    .controller('MainCtrl', function ($rootScope, $state, $http, LoginService, UserContext, BASE_URI) {
         var main = this;
 
         function initPermission() {
-            $http.post('/api/permission')
+            $http.post(BASE_URI+'/api/permission')
                 .then(function(response) {
                     /*console.log('permissions:'+response.data);*/
                     UserContext.setPermissions(response.data);

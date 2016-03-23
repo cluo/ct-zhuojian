@@ -54,10 +54,12 @@ public class UploadHandler {
                 ctImage.setConsultationId(id);
                 LOGGER.info("upload path : {}", path);
                 ctImageDao.addCTImage(ctImage, responseMsg -> {
+                    HttpServerResponse response = ctx.response();
+                    response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
                     if (responseMsg.getCode().getCode() == HttpCode.OK.getCode()) {
-                        ctx.response().end(new JsonObject().put("filename", img).encode());
+                        response.end(new JsonObject().put("filename", img).encode());
                     } else {
-                        ctx.response().setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getContent());
+                        response.setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getContent());
                     }
                 });
                 break;
@@ -89,7 +91,9 @@ public class UploadHandler {
                 ctImages.add(ctImage);
             }
             ctImageDao.addCTImages(ctImages, responseMsg -> {
-                ctx.response().setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getContent());
+                HttpServerResponse response = ctx.response();
+                response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
+                response.setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getContent());
             });
         };
     }
@@ -103,6 +107,7 @@ public class UploadHandler {
         return  ctx -> {
             String image = ctx.request().getParam("image");
             HttpServerResponse response = ctx.response();
+            response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
             response.setChunked(true);
             response.sendFile(AppUtil.getUploadDir() + File.separator + image);
         };

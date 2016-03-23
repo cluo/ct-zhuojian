@@ -1,5 +1,6 @@
 package com.zhuojian.ct.security;
 
+import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.auth.AuthProvider;
 import io.vertx.ext.auth.User;
 import io.vertx.ext.web.RoutingContext;
@@ -18,6 +19,8 @@ public class APIInterceptorHandler extends AuthHandlerImpl {
     @Override
     public void handle(RoutingContext context) {
         Session session = context.session();
+        HttpServerResponse response = context.response();
+        response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
         if (session != null) {
             User user = context.user();
             if (user != null) {
@@ -25,7 +28,7 @@ public class APIInterceptorHandler extends AuthHandlerImpl {
                 authorise(user, context);
             } else {
                 LOGGER.info("user is not authorised!");
-                context.response().setStatusCode(401).end(); // Unauthorized
+                response.setStatusCode(401).end(); // Unauthorized
             }
         } else {
             LOGGER.error("No session!");

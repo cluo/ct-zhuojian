@@ -86,7 +86,7 @@ public class WebServer extends AbstractVerticle {
         router.route("/logout").handler(context -> {
             context.clearUser();
             // Redirect back to the index page
-            context.response().putHeader("location", "/").setStatusCode(302).end();
+            context.response().putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60").putHeader("location", "/").setStatusCode(302).end();
         });
 
         // Must be the latest handler to register

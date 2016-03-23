@@ -44,6 +44,10 @@ public class ConsultationHandler {
                     }
                 }
                 HttpServerResponse response = ctx.response();
+                response.putHeader("Access-Control-Allow-Origin", "*")
+                        .putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS")
+                        .putHeader("Access-Control-Max-Age", "60")
+                        .putHeader("Access-Control-Allow-Credentials", "false");
                 response.setChunked(true);
                 response.end(cts.encode());
             });
@@ -60,6 +64,11 @@ public class ConsultationHandler {
                 JsonArray cts = new JsonArray();
                 HttpServerResponse response = ctx.response();
                 response.setChunked(true);
+                response.putHeader("Access-Control-Allow-Origin", "*")
+                        .putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS")
+                        .putHeader("Access-Control-Max-Age", "60")
+                        .putHeader("Access-Control-Allow-Credentials", "false")
+                        .putHeader("Access-Control-Allow-Headers", "true");
                 if (result != null){
                     response.end(result.encode());
                 }
@@ -78,12 +87,14 @@ public class ConsultationHandler {
             String created = data.getString("created");
             String record = data.getString("record");
             String updated = data.getString("updated");
+            HttpServerResponse response = ctx.response();
+            response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
             consultationDao.addConsultation(new Consultation(id,created,record,updated), responseMsg -> {
                 if (responseMsg.getCode().getCode() == HttpCode.OK.getCode()){
-                    ctx.response().end(responseMsg.getContent());
+                    response.end(responseMsg.getContent());
                 }
                 else{
-                    ctx.response().setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getContent());
+                    response.setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getContent());
                 }
             });
         };
@@ -99,12 +110,14 @@ public class ConsultationHandler {
             if (StringUtils.isNotEmpty(record)){
                 consultation.setRecord(record);
             }
+            HttpServerResponse response = ctx.response();
+            response.putHeader("Access-Control-Allow-Origin", "*").putHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS").putHeader("Access-Control-Max-Age", "60");
             consultationDao.updateConsultation(consultation, responseMsg -> {
                 if (responseMsg.getCode().getCode() == HttpCode.OK.getCode()){
-                    ctx.response().end(responseMsg.getContent());
+                    response.end(responseMsg.getContent());
                 }
                 else{
-                    ctx.response().setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getContent());
+                    response.setStatusCode(responseMsg.getCode().getCode()).end(responseMsg.getContent());
                 }
             });
         };
